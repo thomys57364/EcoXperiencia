@@ -37,10 +37,26 @@ Cada página HTML tiene:
   3. Al loguearse → Redirige a perfil.html o a la página que intentaba visitar
   
 ## Restricciones por login 
-
+```
   // En favoritos.html y perfil.html:
   if (!Auth.isLoggedIn()) {
       window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
   }
+```
+# ❤️ 3. SISTEMA DE FAVORITOS
 
+## Módulo Favorites
+
+  // Guardado en localStorage:
+  // - ecoxperiencia_favorites → Array de IDs [1, 3, 7]
+
+## Funciones:
+  - Favorites.toggle(id) → Agrega/quita de favoritos
+  - Favorites.isFavorite(id) → Boolean para UI (corazón lleno/vacío)
+  - Favorites.getExperiences() → Retorna objetos completos de experiencias favoritas
+
+## Comportamiento en UI:
+  - Botón corazón en cada card → Cambia color si está guardado
+  - Si usuario no logueado hace clic → Toast "Inicia sesión" → Redirige a login
+  - En favoritos.html → Muestra mensaje vacío si no hay favoritos
   
