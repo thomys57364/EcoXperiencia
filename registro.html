@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - EcoXperiencia</title>
+    <meta name="description" content="Crea tu cuenta en EcoXperiencia y descubre experiencias únicas.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-page">
+    <section class="auth-section">
+        <div class="auth-container">
+            <div class="auth-card fade-up">
+                <div class="auth-header">
+                    <a href="index.html" class="auth-logo">
+                        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 2C16 2 8 8 8 16C8 21 11 26 16 30C21 26 24 21 24 16C24 8 16 2 16 2Z" fill="currentColor" opacity="0.3"/>
+                            <path d="M16 6C16 6 12 10 12 16C12 19 13.5 22 16 25C18.5 22 20 19 20 16C20 10 16 6 16 6Z" fill="currentColor"/>
+                            <path d="M16 10C16 10 14 13 14 16C14 18 14.8 20 16 22C17.2 20 18 18 18 16C18 13 16 10 16 10Z" fill="currentColor" opacity="0.6"/>
+                        </svg>
+                        EcoXperiencia
+                    </a>
+                    <h1>Crea tu cuenta</h1>
+                    <p>Únete a nuestra comunidad de viajeros</p>
+                </div>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="name">Nombre completo</label>
+                        <input type="text" id="name" name="name" required placeholder="Juan Pérez">
+                        <p class="error-message" id="name-error">Nombre requerido</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="tu@email.com">
+                        <p class="error-message" id="email-error">Email inválido</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required placeholder="Mínimo 6 caracteres">
+                        <p class="error-message" id="password-error">La contraseña debe tener al menos 6 caracteres</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar contraseña</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Repite tu contraseña">
+                        <p class="error-message" id="confirm-error">Las contraseñas no coinciden</p>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">Acepto los <a href="legal.html" target="_blank">términos de uso</a> y la <a href="legal.html" target="_blank">política de privacidad</a></label>
+                    </div>
+
+                    <div id="form-error" class="error-message show" style="text-align: center; margin-bottom: var(--space-4);"></div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">Crear cuenta</button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if already logged in
+            if (EcoXperiencia.Auth.isLoggedIn()) {
+                window.location.href = 'perfil.html';
+                return;
+            }
+
+            const form = document.getElementById('registerForm');
+            const formError = document.getElementById('form-error');
+            const submitBtn = document.getElementById('submitBtn');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const terms = document.getElementById('terms').checked;
+
+                // Reset errors
+                formError.textContent = '';
+                formError.classList.remove('show');
+
+                // Validation
+                if (password.length < 6) {
+                    formError.textContent = 'La contraseña debe tener al menos 6 caracteres';
+                    formError.classList.add('show');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    formError.textContent = 'Las contraseñas no coinciden';
+                    formError.classList.add('show');
+                    return;
+                }
+
+                if (!terms) {
+                    formError.textContent = 'Debes aceptar los términos de uso';
+                    formError.classList.add('show');
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Creando cuenta...';
+
+                // Simulate API delay
+                setTimeout(() => {
+                    const result = EcoXperiencia.Auth.register({
+                        name: name,
+                        email: email,
+                        password: password
+                    });
+
+                    if (result.success) {
+                        EcoXperiencia.Toast.show('¡Cuenta creada exitosamente!');
+                        setTimeout(() => {
+                            window.location.href = 'perfil.html';
+                        }, 1000);
+                    } else {
+                        formError.textContent = result.message;
+                        formError.classList.add('show');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Crear cuenta';
+                    }
+                }, 800);
+            });
+        });
+    </script>
+</body>
+</html>
