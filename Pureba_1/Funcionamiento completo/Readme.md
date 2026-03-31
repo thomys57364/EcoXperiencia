@@ -15,7 +15,7 @@ Cada página HTML tiene:
   2. Componentes compartidos → Cards de experiencias, botones, iconos SVG
   3. Datos en memoria → Array experiencesData con 8 experiencias de ejemplo
 
-#🔐 2. SISTEMA DE AUTENTICACIÓN (localStorage)
+# 🔐 2. SISTEMA DE AUTENTICACIÓN (localStorage)
 
 ## Módulo Auth
 
