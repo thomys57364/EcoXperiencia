@@ -18,11 +18,11 @@ Cada página HTML tiene:
 # 🔐 2. SISTEMA DE AUTENTICACIÓN (localStorage)
 
 ## Módulo Auth
-
+```
  // Guardado en localStorage:
  // - ecoxperiencia_users → Array de usuarios registrados
  // - ecoxperiencia_currentUser → Usuario logueado actual
-
+```
 ## Funciones principales:
 
 - Auth.register({name, email, password}) → Crea usuario, valida email único
@@ -46,10 +46,10 @@ Cada página HTML tiene:
 # ❤️ 3. SISTEMA DE FAVORITOS
 
 ## Módulo Favorites
-
+```
   // Guardado en localStorage:
   // - ecoxperiencia_favorites → Array de IDs [1, 3, 7]
-
+```
 ## Funciones:
   - Favorites.toggle(id) → Agrega/quita de favoritos
   - Favorites.isFavorite(id) → Boolean para UI (corazón lleno/vacío)
