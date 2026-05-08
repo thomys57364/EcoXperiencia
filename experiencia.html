@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de experiencia - EcoXperiencia</title>
+    <meta name="description" content="Descubre los detalles de esta experiencia ecoturística única en Colombia.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="page-content">
+        <section class="experience-detail" id="experienceDetail">
+            <div class="container">
+                <div class="experience-header">
+                    <nav class="experience-breadcrumbs">
+                        <a href="explorar.html">Experiencias</a>
+                        <span>/</span>
+                        <span id="breadcrumb-title">Cargando...</span>
+                    </nav>
+                    <h1 class="experience-title" id="experienceTitle">Cargando...</h1>
+                    <div class="experience-meta">
+                        <span id="experienceRating">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <span id="ratingValue">-</span> · <span id="reviewsValue">-</span> reseñas
+                        </span>
+                        <span id="experienceLocation">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span id="locationValue">-</span>
+                        </span>
+                        <span id="experienceCategory">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                            <span id="categoryValue">-</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="experience-gallery" id="experienceGallery">
+                    <div class="gallery-main">
+                        <img id="mainImage" src="" alt="">
+                    </div>
+                    <div class="gallery-thumbs" id="galleryThumbs"></div>
+                </div>
+
+                <div class="experience-content">
+                    <div class="experience-left">
+                        <div class="experience-description">
+                            <h3>Acerca de esta experiencia</h3>
+                            <p id="experienceDescription">Cargando...</p>
+
+                            <div class="experience-info-grid">
+                                <div class="experience-info-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    <div><strong>Duración</strong><span id="expDuration">-</span></div>
+                                </div>
+                                <div class="experience-info-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                                    <div><strong>Máximo</strong><span id="expMaxPeople">-</span></div>
+                                </div>
+                                <div class="experience-info-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <div><strong>Punto de encuentro</strong><span id="expMeetingPoint">-</span></div>
+                                </div>
+                                <div class="experience-info-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                    <div><strong>Cancelación</strong><span id="expCancellation">-</span></div>
+                                </div>
+                            </div>
+
+                            <h3 style="margin-top: var(--space-8);">Lo que incluye</h3>
+                            <div class="experience-features" id="experienceFeatures"></div>
+
+                            <h3 style="margin-top: var(--space-8);">Tu anfitrión</h3>
+                            <div class="card" style="background: white; padding: var(--space-6); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                                <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4);">
+                                    <div id="hostAvatar" style="width: 64px; height: 64px; border-radius: 50%; background-color: var(--color-moss); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: var(--text-xl); flex-shrink: 0;"></div>
+                                    <div>
+                                        <h4 id="hostName" style="font-weight: 600; color: var(--color-moss);"></h4>
+                                        <p id="hostSince" style="font-size: var(--text-sm); color: var(--color-gray-500);"></p>
+                                    </div>
+                                </div>
+                                <p id="hostBio" style="color: var(--color-gray-700);"></p>
+                            </div>
+
+                            <!-- Reviews Section -->
+                            <div class="reviews-section" style="margin-top: var(--space-10);">
+                                <div class="reviews-header">
+                                    <h3>Reseñas</h3>
+                                    <span id="reviewsAverage"></span>
+                                </div>
+
+                                <div id="reviewsList"></div>
+
+                                <!-- Review Form -->
+                                <div id="reviewFormContainer" style="margin-top: var(--space-8);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="experience-right">
+                        <div class="booking-card">
+                            <div class="booking-price">
+                                <span class="price" id="bookingPrice">-</span>
+                                <span class="per-person">/ persona</span>
+                            </div>
+
+                            <div class="booking-dates">
+                                <div class="booking-date">
+                                    <label>Fecha</label>
+                                    <input type="date" id="bookingDate" min="">
+                                </div>
+                                <div class="booking-date">
+                                    <label>Horario</label>
+                                    <select id="bookingTime">
+                                        <option value="08:00">08:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="14:00">02:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="booking-guests">
+                                <label>Viajeros</label>
+                                <select id="bookingGuests">
+                                    <option value="1">1 persona</option>
+                                    <option value="2">2 personas</option>
+                                    <option value="3">3 personas</option>
+                                    <option value="4">4 personas</option>
+                                    <option value="5">5+ personas</option>
+                                </select>
+                            </div>
+
+                            <div id="bookingSummary" style="margin-bottom: var(--space-4); padding: var(--space-4); background-color: var(--color-cream); border-radius: var(--radius-md);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
+                                    <span id="summaryPricePerPerson"></span>
+                                    <span id="summaryGuests"></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-weight: 600; padding-top: var(--space-2); border-top: 1px solid var(--color-gray-300);">
+                                    <span>Total</span>
+                                    <span id="summaryTotal"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: var(--space-4);">
+                                <label for="bookingNotes" style="font-size: var(--text-xs); font-weight: 600; color: var(--color-moss); text-transform: uppercase;">Notas (opcional)</label>
+                                <textarea id="bookingNotes" rows="2" placeholder="Alguna preferencia o restricción..." style="width:100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-gray-300); border-radius: var(--radius-md); font-size: var(--text-sm); resize: none;"></textarea>
+                            </div>
+
+                            <button class="btn-book" id="btnBook">Reservar ahora</button>
+                            <button class="btn-save" id="btnSave">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                                Guardar en favoritos
+                            </button>
+
+                            <p class="booking-note">Cancelación gratuita hasta 24 horas antes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const { Auth, Bookings, Reviews, Favorites, Toast, experiencesData, formatPrice, getUrlParam } = EcoXperiencia;
+
+            const experienceId = parseInt(getUrlParam('id'));
+            if (!experienceId) { window.location.href = '404.html'; return; }
+
+            const experience = experiencesData.find(e => e.id === experienceId);
+            if (!experience) { window.location.href = '404.html'; return; }
+
+            // Populate basic data
+            document.title = experience.title + ' - EcoXperiencia';
+            document.getElementById('breadcrumb-title').textContent = experience.title;
+            document.getElementById('experienceTitle').textContent = experience.title;
+            document.getElementById('ratingValue').textContent = experience.rating;
+            document.getElementById('reviewsValue').textContent = experience.reviews;
+            document.getElementById('locationValue').textContent = experience.location;
+            document.getElementById('categoryValue').textContent = experience.category;
+            document.getElementById('experienceDescription').textContent = experience.description;
+            document.getElementById('bookingPrice').textContent = formatPrice(experience.price);
+            document.getElementById('expDuration').textContent = experience.duration;
+            document.getElementById('expMaxPeople').textContent = experience.maxPeople + ' personas';
+            document.getElementById('expMeetingPoint').textContent = experience.meetingPoint || 'A confirmar';
+
+            const cancellationLabels = { flexible: 'Flexible (hasta 24h antes)', moderada: 'Moderada (hasta 5 días antes)', estricta: 'Estricta (no reembolsable)' };
+            document.getElementById('expCancellation').textContent = cancellationLabels[experience.cancellationPolicy] || experience.cancellationPolicy;
+
+            // Image gallery
+            document.getElementById('mainImage').src = experience.image;
+            document.getElementById('mainImage').alt = experience.title;
+
+            const thumbsContainer = document.getElementById('galleryThumbs');
+            thumbsContainer.innerHTML = [1, 2, 3, 4].map(() =>
+                `<img src="${experience.image}" alt="${experience.title}">`
+            ).join('');
+
+            thumbsContainer.querySelectorAll('img').forEach((thumb, i) => {
+                if (i === 0) thumb.classList.add('active');
+                thumb.addEventListener('click', () => {
+                    document.getElementById('mainImage').src = thumb.src;
+                    thumbsContainer.querySelectorAll('img').forEach(t => t.classList.remove('active'));
+                    thumb.classList.add('active');
+                });
+            });
+
+            // Features
+            document.getElementById('experienceFeatures').innerHTML = experience.includes.map(item => `
+                <div class="experience-feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>${item}</span>
+                </div>
+            `).join('');
+
+            // Host info
+            document.getElementById('hostAvatar').textContent = experience.host.avatar;
+            document.getElementById('hostName').textContent = experience.host.name;
+            document.getElementById('hostSince').textContent = 'Anfitrión desde ' + experience.host.since;
+            document.getElementById('hostBio').textContent = experience.host.bio;
+
+            // Booking form
+            const bookingDate = document.getElementById('bookingDate');
+            const bookingGuests = document.getElementById('bookingGuests');
+            const today = new Date().toISOString().split('T')[0];
+            bookingDate.setAttribute('min', today);
+            bookingDate.value = today;
+
+            function updateSummary() {
+                const guests = parseInt(bookingGuests.value);
+                const total = experience.price * guests;
+                document.getElementById('summaryPricePerPerson').textContent = formatPrice(experience.price);
+                document.getElementById('summaryGuests').textContent = 'x ' + guests + ' persona' + (guests > 1 ? 's' : '');
+                document.getElementById('summaryTotal').textContent = formatPrice(total);
+            }
+
+            updateSummary();
+            bookingGuests.addEventListener('change', updateSummary);
+
+            // Favorite button
+            const btnSave = document.getElementById('btnSave');
+            function updateFavBtn() {
+                const isFav = Favorites.isFavorite(experience.id);
+                btnSave.classList.toggle('active', isFav);
+                btnSave.innerHTML = isFav
+                    ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> Guardado en favoritos`
+                    : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> Guardar en favoritos`;
+            }
+            updateFavBtn();
+
+            btnSave.addEventListener('click', () => {
+                if (!Auth.isLoggedIn()) {
+                    Toast.show('Inicia sesión para guardar favoritos', 'error');
+                    setTimeout(() => window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href), 1500);
+                    return;
+                }
+                Favorites.toggle(experience.id);
+                updateFavBtn();
+                Toast.show(Favorites.isFavorite(experience.id) ? 'Agregado a favoritos' : 'Eliminado de favoritos');
+            });
+
+            // Book button
+            document.getElementById('btnBook').addEventListener('click', () => {
+                if (!Auth.isLoggedIn()) {
+                    Toast.show('Inicia sesión para reservar', 'error');
+                    setTimeout(() => window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href), 1500);
+                    return;
+                }
+
+                const date = bookingDate.value;
+                if (!date) { Toast.show('Selecciona una fecha', 'error'); return; }
+
+                const result = Bookings.create({
+                    experienceId: experience.id,
+                    date: date,
+                    time: document.getElementById('bookingTime').value,
+                    guests: document.getElementById('bookingGuests').value,
+                    notes: document.getElementById('bookingNotes').value
+                });
+
+                if (result.success) {
+                    const overlay = EcoXperiencia.Modal.show(
+                        '¡Reserva confirmada!',
+                        `Tu reserva para "${experience.title}" está confirmada.\n\nFecha: ${date}\nPersonas: ${result.booking.guests}\nTotal: ${formatPrice(result.booking.totalPrice)}\nCódigo: ${result.booking.confirmationCode}`,
+                        [
+                            { text: 'Ver mis reservas', class: 'btn-secondary', onClick: "window.location.href='perfil.html#bookings'" },
+                            { text: 'Continuar explorando', class: 'btn-submit', onClick: "window.location.href='explorar.html'" }
+                        ]
+                    );
+                    loadReviews();
+                } else {
+                    Toast.show(result.message || 'Error al crear la reserva', 'error');
+                }
+            });
+
+            // --- REVIEWS ---
+            function loadReviews() {
+                const reviews = Reviews.getByExperience(experienceId);
+                const container = document.getElementById('reviewsList');
+                const avgEl = document.getElementById('reviewsAverage');
+
+                if (reviews.length === 0) {
+                    container.innerHTML = `<p style="color: var(--color-gray-500); font-style: italic;">Sé el primero en reseñar esta experiencia.</p>`;
+                    avgEl.innerHTML = '';
+                } else {
+                    const avg = (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1);
+                    avgEl.innerHTML = `★ ${avg} · ${reviews.length} reseña${reviews.length !== 1 ? 's' : ''}`;
+
+                    container.innerHTML = reviews.map(review => `
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-author">
+                                    <div class="review-avatar" style="background-color: var(--color-moss);">${review.userAvatar}</div>
+                                    <div class="review-meta">
+                                        <h4>${review.userName}</h4>
+                                        <span>${Reviews.formatDate(review.createdAt)}</span>
+                                    </div>
+                                </div>
+                                <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                            </div>
+                            <p class="review-text">${review.comment}</p>
+                        </div>
+                    `).join('');
+                }
+
+                // Review form
+                renderReviewForm();
+            }
+
+            function renderReviewForm() {
+                const formContainer = document.getElementById('reviewFormContainer');
+                if (!Auth.isLoggedIn()) {
+                    formContainer.innerHTML = `
+                        <div style="background: var(--color-cream); border-radius: var(--radius-lg); padding: var(--space-6); text-align: center;">
+                            <p style="color: var(--color-gray-700); margin-bottom: var(--space-3);">¿Disfrutaste esta experiencia?</p>
+                            <a href="login.html?redirect=${encodeURIComponent(window.location.href)}" class="btn-submit" style="display: inline-block; width: auto; padding: var(--space-3) var(--space-6);">Inicia sesión para reseñar</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                if (Reviews.hasReviewed(experienceId)) {
+                    formContainer.innerHTML = `
+                        <div style="background: var(--color-cream); border-radius: var(--radius-lg); padding: var(--space-4); display: flex; align-items: center; gap: var(--space-3);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <p style="color: var(--color-gray-700);">Ya has reseñado esta experiencia. ¡Gracias por tu opinión!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                formContainer.innerHTML = `
+                    <div style="background: white; border-radius: var(--radius-lg); padding: var(--space-6); box-shadow: var(--shadow-sm);">
+                        <h4 style="font-family: var(--font-display); color: var(--color-moss); margin-bottom: var(--space-4);">Escribe tu reseña</h4>
+                        <form id="reviewForm">
+                            <div class="form-group">
+                                <label>Calificación</label>
+                                <div class="star-rating" id="starRating">
+                                    ${[1,2,3,4,5].map(n => `<button type="button" class="star-btn" data-value="${n}" aria-label="${n} estrellas">★</button>`).join('')}
+                                </div>
+                                <input type="hidden" id="selectedRating" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="reviewComment">Tu opinión</label>
+                                <textarea id="reviewComment" rows="4" placeholder="Cuéntanos sobre tu experiencia (mínimo 10 caracteres)..." required></textarea>
+                            </div>
+                            <div id="review-error" class="error-message"></div>
+                            <button type="submit" class="btn-submit" style="width: auto; padding: var(--space-3) var(--space-6);">Publicar reseña</button>
+                        </form>
+                    </div>
+                `;
+
+                // Star rating interaction
+                const starBtns = formContainer.querySelectorAll('.star-btn');
+                const selectedRatingInput = formContainer.querySelector('#selectedRating');
+                let currentRating = 0;
+
+                starBtns.forEach(btn => {
+                    btn.addEventListener('mouseover', () => {
+                        const val = parseInt(btn.dataset.value);
+                        starBtns.forEach((b, i) => b.classList.toggle('hovered', i < val));
+                    });
+                    btn.addEventListener('mouseout', () => {
+                        starBtns.forEach((b, i) => b.classList.toggle('selected', i < currentRating));
+                        starBtns.forEach(b => b.classList.remove('hovered'));
+                    });
+                    btn.addEventListener('click', () => {
+                        currentRating = parseInt(btn.dataset.value);
+                        selectedRatingInput.value = currentRating;
+                        starBtns.forEach((b, i) => {
+                            b.classList.toggle('selected', i < currentRating);
+                            b.classList.remove('hovered');
+                        });
+                    });
+                });
+
+                // Review form submit
+                formContainer.querySelector('#reviewForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const errorEl = formContainer.querySelector('#review-error');
+                    errorEl.textContent = '';
+                    errorEl.classList.remove('show');
+
+                    const rating = parseInt(selectedRatingInput.value);
+                    const comment = formContainer.querySelector('#reviewComment').value;
+
+                    if (!rating) {
+                        errorEl.textContent = 'Selecciona una calificación';
+                        errorEl.classList.add('show');
+                        return;
+                    }
+
+                    const result = Reviews.create({ experienceId, rating, comment });
+                    if (result.success) {
+                        Toast.show('¡Reseña publicada con éxito!');
+                        loadReviews();
+                    } else {
+                        errorEl.textContent = result.message;
+                        errorEl.classList.add('show');
+                    }
+                });
+            }
+
+            loadReviews();
+        });
+    </script>
+</body>
+</html>

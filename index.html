@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoXperiencia - Descubre Colombia desde adentro</title>
+    <meta name="description" content="Experiencias ecoturísticas auténticas con comunidades locales en Colombia. Senderismo, avistamiento, camping y más.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navbar Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" aria-label="Hero">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="Montañas de Colombia al amanecer" loading="eager">
+        </div>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <h1 class="hero-title fade-up">Descubre Colombia desde adentro</h1>
+            <p class="hero-subtitle fade-up">Experiencias ecoturísticas auténticas con comunidades locales</p>
+
+            <form class="hero-search fade-up" id="heroSearch" role="search" aria-label="Buscar experiencias">
+                <div class="search-field">
+                    <label for="search-destination">Destino</label>
+                    <input type="text" id="search-destination" placeholder="¿A dónde quieres ir?" aria-label="Destino de búsqueda">
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-field">
+                    <label for="search-date">Fecha</label>
+                    <input type="date" id="search-date" aria-label="Fecha de la experiencia">
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-field">
+                    <label for="search-guests">Personas</label>
+                    <select id="search-guests" aria-label="Número de personas">
+                        <option value="1">1 persona</option>
+                        <option value="2">2 personas</option>
+                        <option value="3-5">3-5 personas</option>
+                        <option value="6+">6+ personas</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-search">Buscar experiencias</button>
+            </form>
+
+            <div class="hero-badge fade-up">
+                <span class="star" aria-hidden="true">★</span>
+                <span>4.9 · +2.400 experiencias · 180 anfitriones</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categorías -->
+    <section class="categories" aria-label="Categorías de experiencias">
+        <div class="categories-scroll">
+            <a href="explorar.html?category=hiking" class="category-card fade-up">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span class="category-name">Senderismo</span>
+            </a>
+
+            <a href="explorar.html?category=wildlife" class="category-card fade-up">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <span class="category-name">Avistamiento</span>
+            </a>
+
+            <a href="explorar.html?category=camping" class="category-card fade-up">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M2 22l2-9h16l2 9"/>
+                    <path d="M4 13V9a4 4 0 014-4h8a4 4 0 014 4v4"/>
+                    <path d="M12 5V3"/>
+                </svg>
+                <span class="category-name">Camping</span>
+            </a>
+
+            <a href="explorar.html?category=rivers" class="category-card fade-up">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0L12 2.69z"/>
+                </svg>
+                <span class="category-name">Ríos y cascadas</span>
+            </a>
+
+            <a href="explorar.html?category=agrotourism" class="category-card fade-up">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M12 8v4"/>
+                    <path d="M12 16h.01"/>
+                </svg>
+                <span class="category-name">Agroturismo</span>
+            </a>
+
+            <a href="explorar.html?category=highmountain" class="category-card fade-up">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+                <span class="category-name">Alta montaña</span>
+            </a>
+
+            <a href="explorar.html?category=diving" class="category-card fade-up">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 2a14.5 14.5 0 010 20 14.5 14.5 0 010-20"/>
+                    <path d="M2 12h20"/>
+                </svg>
+                <span class="category-name">Buceo</span>
+            </a>
+
+            <a href="explorar.html" class="category-card fade-up">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <span class="category-name">Ver todo</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Experiencias Destacadas -->
+    <section class="experiences" id="experiences" aria-labelledby="experiences-title">
+        <div class="container">
+            <h2 class="section-title fade-up" id="experiences-title">Experiencias que te cambiarán</h2>
+
+            <div class="experiences-grid" id="experiencesGrid">
+                <!-- Cards will be loaded by JavaScript -->
+            </div>
+
+            <div style="text-align: center; margin-top: var(--space-10);">
+                <a href="explorar.html" class="btn-submit" style="display: inline-block; width: auto; padding: var(--space-4) var(--space-10);">
+                    Ver todas las experiencias
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cómo Funciona -->
+    <section class="how-it-works" id="how-it-works" aria-labelledby="how-it-works-title">
+        <div class="container">
+            <h2 class="section-title fade-up" id="how-it-works-title">Cómo funciona</h2>
+
+            <div class="steps-container">
+                <div class="step fade-up">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <h3 class="step-title">Explora y elige</h3>
+                    <p class="step-description">Usa filtros para encontrar tu experiencia ideal entre cientos de opciones verificadas</p>
+                </div>
+
+                <div class="step fade-up">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <rect x="2" y="5" width="20" height="14" rx="2"/>
+                            <path d="M2 10h20"/>
+                        </svg>
+                    </div>
+                    <h3 class="step-title">Reserva con seguridad</h3>
+                    <p class="step-description">Pago seguro, confirmación inmediata y soporte 24/7 durante todo tu viaje</p>
+                </div>
+
+                <div class="step fade-up">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                        </svg>
+                    </div>
+                    <h3 class="step-title">Vive la experiencia</h3>
+                    <p class="step-description">Conecta con la naturaleza y comunidades locales de forma auténtica y responsable</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Anfitriones -->
+    <section class="hosts" id="hosts" aria-labelledby="hosts-title">
+        <div class="container">
+            <div class="hosts-grid">
+                <div class="hosts-content">
+                    <h2 class="hosts-title fade-up" id="hosts-title">Comparte tu territorio, genera ingresos</h2>
+
+                    <div class="hosts-benefits">
+                        <div class="benefit fade-up">
+                            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Publica gratis en minutos</span>
+                        </div>
+                        <div class="benefit fade-up">
+                            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Pagos seguros y puntuales</span>
+                        </div>
+                        <div class="benefit fade-up">
+                            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Herramientas de gestión profesionales</span>
+                        </div>
+                    </div>
+
+                    <a href="anfitrion.html" class="btn-host-cta fade-up">
+                        Conviértete en anfitrión
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="hosts-image fade-up">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80" alt="Anfitrión local colombiano guiando un tour de senderismo" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="testimonials" aria-labelledby="testimonials-title">
+        <div class="container">
+            <h2 class="section-title fade-up" id="testimonials-title">Lo que dicen nuestros viajeros</h2>
+
+            <div class="testimonials-grid">
+                <article class="testimonial-card fade-up">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar" style="background-color: #1C3A2A;" aria-hidden="true">MC</div>
+                        <div class="testimonial-info">
+                            <h4>María Camila Rodríguez</h4>
+                            <p>Bogotá, Colombia</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating" aria-label="Calificación: 5 de 5 estrellas">★★★★★</div>
+                    <p class="testimonial-text">"Una experiencia transformadora. Nuestro anfitrión en el Cocuy conocía cada rincón de la montaña y nos compartió historias que no encontrarías en ninguna guía."</p>
+                    <span class="testimonial-experience">Amanecer en el Cocuy</span>
+                </article>
+
+                <article class="testimonial-card fade-up">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar" style="background-color: #C4893A;" aria-hidden="true">AP</div>
+                        <div class="testimonial-info">
+                            <h4>Andrés Pérez</h4>
+                            <p>Medellín, Colombia</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating" aria-label="Calificación: 5 de 5 estrellas">★★★★★</div>
+                    <p class="testimonial-text">"Ver las ballenas en el Pacífico fue un sueño hecho realidad. La plataforma hizo todo muy fácil y el anfitrión fue increíblemente profesional."</p>
+                    <span class="testimonial-experience">Ballenas en el Pacífico</span>
+                </article>
+
+                <article class="testimonial-card fade-up">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar" style="background-color: #7EC850;" aria-hidden="true">LG</div>
+                        <div class="testimonial-info">
+                            <h4>Laura Gómez</h4>
+                            <p>Cali, Colombia</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating" aria-label="Calificación: 5 de 5 estrellas">★★★★★</div>
+                    <p class="testimonial-text">"La experiencia del café en el Quindío superó todas mis expectativas. Aprendí tanto sobre el proceso y conocí a productores maravillosos."</p>
+                    <span class="testimonial-experience">Café de origen en el Quindío</span>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats" aria-label="Estadísticas de la plataforma">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="2400">0</span>
+                    <span class="stat-label">+ Experiencias</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="180">0</span>
+                    <span class="stat-label">+ Anfitriones</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="15000">0</span>
+                    <span class="stat-label">+ Viajeros</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="4.9" data-decimals="1">0</span>
+                    <span class="stat-label">★ Promedio</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Load featured experiences
+        document.addEventListener('DOMContentLoaded', function() {
+            const grid = document.getElementById('experiencesGrid');
+            const featuredExperiences = EcoXperiencia.experiencesData.slice(0, 6);
+
+            grid.innerHTML = featuredExperiences.map(exp => EcoXperiencia.Components.experienceCard(exp)).join('');
+
+            // Hero search form
+            const heroSearch = document.getElementById('heroSearch');
+            const dateInput = document.getElementById('search-date');
+
+            // Set minimum date to today
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.setAttribute('min', today);
+            }
+
+            heroSearch.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const destination = document.getElementById('search-destination').value;
+                const date = dateInput.value;
+                const guests = document.getElementById('search-guests').value;
+
+                // Build search URL
+                const params = new URLSearchParams();
+                if (destination) params.append('q', destination);
+                if (date) params.append('date', date);
+                if (guests) params.append('guests', guests);
+
+                window.location.href = 'explorar.html?' + params.toString();
+            });
+
+            // Navbar scroll effect for hero
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>

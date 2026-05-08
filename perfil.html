@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - EcoXperiencia</title>
+    <meta name="description" content="Gestiona tu perfil, reservas y notificaciones en EcoXperiencia.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="page-content">
+        <section class="profile-section">
+            <div class="container">
+
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-info">
+                        <div class="profile-avatar" id="userAvatar"></div>
+                        <div class="profile-details">
+                            <h1 id="userName">Cargando...</h1>
+                            <p id="userEmail"></p>
+                            <p style="color: var(--color-gray-500); font-size: var(--text-sm);">
+                                Miembro desde <span id="memberSince"></span>
+                                &nbsp;·&nbsp;
+                                <span id="userRoleBadge" class="role-badge"></span>
+                            </p>
+                            <div class="profile-actions">
+                                <button class="btn-secondary" onclick="window.location.href='favoritos.html'">Mis favoritos</button>
+                                <button class="btn-secondary" id="btnHostDash" style="display:none" onclick="window.location.href='dashboard-anfitrion.html'">Dashboard anfitrión</button>
+                                <button class="btn-danger" id="btnLogout">Cerrar sesión</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="profile-tabs" id="profileTabs">
+                    <button class="profile-tab active" data-tab="info">Información</button>
+                    <button class="profile-tab" data-tab="bookings">
+                        Mis reservas
+                        <span class="tab-count" id="bookingsCount"></span>
+                    </button>
+                    <button class="profile-tab" data-tab="notifications">
+                        Notificaciones
+                        <span class="tab-count notif-tab-count" id="notifCount"></span>
+                    </button>
+                    <button class="profile-tab" data-tab="security">Seguridad</button>
+                </div>
+
+                <!-- Tab: Información -->
+                <div class="tab-panel active" id="tab-info">
+                    <div class="card" style="background: white; border-radius: var(--radius-lg); padding: var(--space-8); box-shadow: var(--shadow-sm);">
+                        <h2 style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-moss); margin-bottom: var(--space-6);">Información personal</h2>
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label for="editName">Nombre completo</label>
+                                <input type="text" id="editName" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editEmail">Email</label>
+                                <input type="email" id="editEmail" name="email" disabled style="background-color: var(--color-gray-100); cursor: not-allowed;">
+                            </div>
+                            <div class="form-group">
+                                <label for="editPhone">Teléfono</label>
+                                <input type="tel" id="editPhone" name="phone" placeholder="+57 300 000 0000">
+                            </div>
+                            <div class="form-group">
+                                <label for="editBio">Bio</label>
+                                <textarea id="editBio" name="bio" rows="3" placeholder="Cuéntanos un poco sobre ti..."></textarea>
+                            </div>
+                            <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+                                <button type="submit" class="btn-submit" style="width: auto; padding: var(--space-3) var(--space-6);">Guardar cambios</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Become Host CTA (only for viajero role) -->
+                    <div id="becomeHostCta" style="display:none; margin-top: var(--space-6); background: linear-gradient(135deg, var(--color-moss), var(--color-moss-light)); border-radius: var(--radius-lg); padding: var(--space-8); color: white;">
+                        <h3 style="font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-3);">¿Listo para ser anfitrión?</h3>
+                        <p style="opacity: 0.9; margin-bottom: var(--space-4);">Comparte tu territorio y genera ingresos compartiendo experiencias únicas con viajeros de todo el mundo.</p>
+                        <a href="anfitrion.html" class="btn-submit" style="display: inline-block; width: auto; padding: var(--space-3) var(--space-6); background-color: var(--color-lime); color: var(--color-moss);">Convertirme en anfitrión</a>
+                    </div>
+                </div>
+
+                <!-- Tab: Mis reservas -->
+                <div class="tab-panel" id="tab-bookings">
+                    <div id="bookingsList"></div>
+                </div>
+
+                <!-- Tab: Notificaciones -->
+                <div class="tab-panel" id="tab-notifications">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+                        <h2 style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-moss);">Notificaciones</h2>
+                        <button class="btn-secondary" id="btnMarkAllRead" style="font-size: var(--text-sm);">Marcar todas como leídas</button>
+                    </div>
+                    <div id="notificationsList"></div>
+                </div>
+
+                <!-- Tab: Seguridad -->
+                <div class="tab-panel" id="tab-security">
+                    <div class="card" style="background: white; border-radius: var(--radius-lg); padding: var(--space-8); box-shadow: var(--shadow-sm);">
+                        <h2 style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-moss); margin-bottom: var(--space-2);">Cambiar contraseña</h2>
+                        <p style="color: var(--color-gray-500); margin-bottom: var(--space-6); font-size: var(--text-sm);">Elige una contraseña segura de al menos 6 caracteres.</p>
+
+                        <form id="changePasswordForm">
+                            <div class="form-group">
+                                <label for="currentPassword">Contraseña actual</label>
+                                <input type="password" id="currentPassword" required placeholder="Tu contraseña actual">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">Nueva contraseña</label>
+                                <input type="password" id="newPassword" required placeholder="Mínimo 6 caracteres">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmNewPassword">Confirmar nueva contraseña</label>
+                                <input type="password" id="confirmNewPassword" required placeholder="Repite la nueva contraseña">
+                            </div>
+                            <div id="password-error" class="error-message"></div>
+                            <button type="submit" class="btn-submit" style="width: auto; padding: var(--space-3) var(--space-6);">Cambiar contraseña</button>
+                        </form>
+                    </div>
+
+                    <div class="card" style="background: white; border-radius: var(--radius-lg); padding: var(--space-8); box-shadow: var(--shadow-sm); margin-top: var(--space-6);">
+                        <h2 style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-error); margin-bottom: var(--space-2);">Zona de peligro</h2>
+                        <p style="color: var(--color-gray-500); margin-bottom: var(--space-4); font-size: var(--text-sm);">Acciones irreversibles para tu cuenta.</p>
+                        <button class="btn-danger" id="btnDeleteAccount">Cerrar sesión de todos los dispositivos</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const { Auth, Bookings, Notifications, Reviews, Toast, Modal, icons } = EcoXperiencia;
+
+            // Redirect if not logged in
+            if (!Auth.isLoggedIn()) {
+                window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
+                return;
+            }
+
+            const user = Auth.getCurrentUser();
+
+            // Populate header
+            document.getElementById('userAvatar').textContent = user.avatar;
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('memberSince').textContent = new Date(user.createdAt).toLocaleDateString('es-CO', { year: 'numeric', month: 'long' });
+
+            const roleBadge = document.getElementById('userRoleBadge');
+            const roleLabels = { viajero: 'Viajero', anfitrion: 'Anfitrión', admin: 'Administrador' };
+            roleBadge.textContent = roleLabels[user.role] || 'Viajero';
+            roleBadge.className = `role-badge role-${user.role}`;
+
+            if (user.role === 'anfitrion' || user.role === 'admin') {
+                document.getElementById('btnHostDash').style.display = 'inline-block';
+            } else {
+                document.getElementById('becomeHostCta').style.display = 'block';
+            }
+
+            // Populate profile form
+            document.getElementById('editName').value = user.name;
+            document.getElementById('editEmail').value = user.email;
+            if (user.phone) document.getElementById('editPhone').value = user.phone;
+            if (user.bio) document.getElementById('editBio').value = user.bio;
+
+            // Logout
+            document.getElementById('btnLogout').addEventListener('click', () => Auth.logout());
+
+            // Profile form submit
+            document.getElementById('profileForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const name = document.getElementById('editName').value.trim();
+                const phone = document.getElementById('editPhone').value.trim();
+                const bio = document.getElementById('editBio').value.trim();
+
+                if (!name) { Toast.show('El nombre es requerido', 'error'); return; }
+
+                const result = Auth.updateProfile({ name, phone, bio });
+                if (result.success) {
+                    document.getElementById('userName').textContent = name;
+                    document.getElementById('userAvatar').textContent = result.user.avatar;
+                    Toast.show('Perfil actualizado correctamente');
+                    // Refresh navbar
+                    document.getElementById('navbar-container').innerHTML = EcoXperiencia.Components.navbar();
+                } else {
+                    Toast.show('Error al actualizar perfil', 'error');
+                }
+            });
+
+            // --- TABS ---
+            const tabs = document.querySelectorAll('.profile-tab');
+            const panels = document.querySelectorAll('.tab-panel');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panels.forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+
+                    if (tab.dataset.tab === 'bookings') loadBookings();
+                    if (tab.dataset.tab === 'notifications') loadNotifications();
+                });
+            });
+
+            // Check URL hash for tab
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById('tab-' + hash)) {
+                tabs.forEach(t => t.classList.remove('active'));
+                panels.forEach(p => p.classList.remove('active'));
+                const targetTab = document.querySelector(`[data-tab="${hash}"]`);
+                if (targetTab) { targetTab.classList.add('active'); document.getElementById('tab-' + hash).classList.add('active'); }
+                if (hash === 'bookings') loadBookings();
+                if (hash === 'notifications') loadNotifications();
+            }
+
+            // Load initial bookings count
+            const userBookings = Bookings.getUserBookings();
+            const bookingsCount = document.getElementById('bookingsCount');
+            if (userBookings.length > 0) bookingsCount.textContent = userBookings.length;
+
+            // Load initial notifications count
+            const unreadCount = Notifications.getUnreadCount();
+            const notifCount = document.getElementById('notifCount');
+            if (unreadCount > 0) notifCount.textContent = unreadCount;
+
+            // --- BOOKINGS ---
+            function loadBookings() {
+                const bookings = Bookings.getUserBookings();
+                const container = document.getElementById('bookingsList');
+
+                if (bookings.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <h2>Sin reservas aún</h2>
+                            <p>Cuando reserves una experiencia, aparecerá aquí.</p>
+                            <a href="explorar.html" class="btn-submit" style="display: inline-block; margin-top: var(--space-4);">Explorar experiencias</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = bookings.map(b => EcoXperiencia.Components.bookingCard(b)).join('');
+
+                // Cancel booking buttons
+                container.querySelectorAll('.btn-cancel-booking').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const bookingId = btn.dataset.bookingId;
+                        Modal.confirm(
+                            'Cancelar reserva',
+                            '¿Estás seguro de que deseas cancelar esta reserva? Esta acción no se puede deshacer.',
+                            () => {
+                                const result = Bookings.cancel(bookingId);
+                                if (result.success) {
+                                    Toast.show('Reserva cancelada');
+                                    loadBookings();
+                                    // Update notification badge
+                                    const uc = Notifications.getUnreadCount();
+                                    notifCount.textContent = uc > 0 ? uc : '';
+                                } else {
+                                    Toast.show(result.message || 'Error al cancelar', 'error');
+                                }
+                            }
+                        );
+                    });
+                });
+            }
+
+            // --- NOTIFICATIONS ---
+            function loadNotifications() {
+                const notifications = Notifications.getAll();
+                const container = document.getElementById('notificationsList');
+
+                if (notifications.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state" style="padding: var(--space-12) var(--space-4);">
+                            <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 01-3.46 0"/>
+                            </svg>
+                            <h2>Sin notificaciones</h2>
+                            <p>Aquí aparecerán tus reservas, mensajes y actualizaciones.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = `<div class="notifications-list">${notifications.map(n => EcoXperiencia.Components.notificationItem(n)).join('')}</div>`;
+
+                // Mark as read on click
+                container.querySelectorAll('.notification-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const notifId = item.dataset.id;
+                        Notifications.markAsRead(notifId);
+                        item.classList.remove('unread');
+                        const uc = Notifications.getUnreadCount();
+                        notifCount.textContent = uc > 0 ? uc : '';
+                        document.getElementById('notifCount').textContent = uc > 0 ? uc : '';
+                    });
+                });
+            }
+
+            // Mark all read
+            document.getElementById('btnMarkAllRead').addEventListener('click', () => {
+                Notifications.markAllAsRead();
+                document.querySelectorAll('.notification-item').forEach(item => item.classList.remove('unread'));
+                notifCount.textContent = '';
+                document.getElementById('notifCount').textContent = '';
+                Toast.show('Todas las notificaciones marcadas como leídas');
+            });
+
+            // --- CHANGE PASSWORD ---
+            document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const currentPwd = document.getElementById('currentPassword').value;
+                const newPwd = document.getElementById('newPassword').value;
+                const confirmPwd = document.getElementById('confirmNewPassword').value;
+                const errorEl = document.getElementById('password-error');
+
+                errorEl.textContent = '';
+                errorEl.classList.remove('show');
+
+                if (newPwd !== confirmPwd) {
+                    errorEl.textContent = 'Las contraseñas nuevas no coinciden';
+                    errorEl.classList.add('show');
+                    return;
+                }
+
+                const result = Auth.changePassword(currentPwd, newPwd);
+                if (result.success) {
+                    Toast.show('Contraseña cambiada exitosamente');
+                    this.reset();
+                } else {
+                    errorEl.textContent = result.message;
+                    errorEl.classList.add('show');
+                }
+            });
+
+            // Delete session
+            document.getElementById('btnDeleteAccount').addEventListener('click', () => {
+                Modal.confirm('Cerrar sesión', '¿Cerrar sesión en todos los dispositivos?', () => {
+                    Auth.logout();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
