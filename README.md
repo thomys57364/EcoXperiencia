@@ -4,17 +4,16 @@ EcoXperiencia — Qué hace y cómo funcionan los roles
                                                                                                                                                                                                                            
   Marketplace de ecoturismo colombiano. Conecta viajeros que buscan experiencias auténticas en la naturaleza con anfitriones locales que las ofrecen (senderismo, kayak, café de origen, glamping, avistamiento, etc.).
 
-  Demo accounts to test with:
+## Demo Accounts
 
-  ┌───────────┬─────────────────────────────┬────────────┐
-  │   Role    │            Email            │  Password  │
-  ├───────────┼─────────────────────────────┼────────────┤
-  │ Admin     │ admin@ecoxperiencia.com     │ admin123   │
-  ├───────────┼─────────────────────────────┼────────────┤
-  │ Anfitrión │ anfitrion@ecoxperiencia.com │ host123    │
-  ├───────────┼─────────────────────────────┼────────────┤
-  │ Viajero   │ viajero@ecoxperiencia.com   │ viajero123 │
-  └───────────┴─────────────────────────────┴────────────┘
+Use the following demo accounts to test the platform:
+
+| Role      | Email                                                             | Password   |
+| --------- | ----------------------------------------------------------------- | ---------- |
+| Admin     | [admin@ecoxperiencia.com](mailto:admin@ecoxperiencia.com)         | admin123   |
+| Anfitrión | [anfitrion@ecoxperiencia.com](mailto:anfitrion@ecoxperiencia.com) | host123    |
+| Viajero   | [viajero@ecoxperiencia.com](mailto:viajero@ecoxperiencia.com)     | viajero123 |
+
                                                                                                                                                                                                                            
   ---                                                       
   Roles
