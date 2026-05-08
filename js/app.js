@@ -301,6 +301,14 @@ const experiencesData = [
 ];
 
 // ═══════════════════════════════════════════════
+// TODAS LAS EXPERIENCIAS (estáticas + creadas por anfitriones)
+// ═══════════════════════════════════════════════
+const getAllExperiences = () => {
+    const dbExps = DB.findAll('experiences');
+    return [...experiencesData, ...dbExps];
+};
+
+// ═══════════════════════════════════════════════
 // ICONOS SVG
 // ═══════════════════════════════════════════════
 const icons = {
@@ -497,7 +505,7 @@ const Favorites = {
 
     getExperiences() {
         const ids = this.getAll();
-        return experiencesData.filter(exp => ids.includes(exp.id));
+        return getAllExperiences().filter(exp => ids.includes(exp.id));
     }
 };
 
@@ -516,7 +524,7 @@ const Bookings = {
         const user = Auth.getCurrentUser();
         if (!user) return { success: false, message: 'No autenticado' };
 
-        const experience = experiencesData.find(e => e.id === data.experienceId);
+        const experience = getAllExperiences().find(e => String(e.id) === String(data.experienceId));
         if (!experience) return { success: false, message: 'Experiencia no encontrada' };
 
         const booking = DB.insert('bookings', {
@@ -577,8 +585,8 @@ const Bookings = {
     getHostBookings() {
         const user = Auth.getCurrentUser();
         if (!user) return [];
-        const hostExperienceIds = experiencesData.filter(e => e.hostId === user.id).map(e => e.id);
-        return DB.findAll('bookings', b => hostExperienceIds.includes(b.experienceId))
+        const hostExperienceIds = getAllExperiences().filter(e => e.hostId === user.id).map(e => String(e.id));
+        return DB.findAll('bookings', b => hostExperienceIds.includes(String(b.experienceId)))
                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
 };
@@ -705,7 +713,88 @@ const Host = {
     getMyExperiences() {
         const user = Auth.getCurrentUser();
         if (!user) return [];
-        return experiencesData.filter(e => e.hostId === user.id);
+        return getAllExperiences().filter(e => e.hostId === user.id);
+    },
+
+    createExperience(data) {
+        const user = Auth.getCurrentUser();
+        if (!user) return { success: false, message: 'No autenticado' };
+        if (!Auth.hasRole('anfitrion')) return { success: false, message: 'Se requiere rol de anfitrión' };
+        if (!data.title || !data.description || !data.price || !data.location) {
+            return { success: false, message: 'Completa todos los campos requeridos' };
+        }
+        const categoryMap = {
+            hiking: 'Senderismo', wildlife: 'Avistamiento', camping: 'Camping',
+            rivers: 'Ríos y cascadas', agrotourism: 'Agroturismo',
+            highmountain: 'Alta montaña', diving: 'Buceo'
+        };
+        const exp = DB.insert('experiences', {
+            hostId: user.id,
+            title: data.title,
+            location: data.location,
+            category: categoryMap[data.categoryId] || data.categoryId,
+            categoryId: data.categoryId,
+            price: parseInt(data.price),
+            rating: 0, reviews: 0, featured: false,
+            image: data.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+            description: data.description,
+            duration: data.duration || '4 horas',
+            maxPeople: parseInt(data.maxPeople) || 10,
+            minPeople: parseInt(data.minPeople) || 1,
+            includes: data.includes ? data.includes.split(',').map(s => s.trim()).filter(Boolean) : [],
+            notIncludes: [],
+            requirements: data.requirements ? data.requirements.split(',').map(s => s.trim()).filter(Boolean) : [],
+            meetingPoint: data.meetingPoint || '',
+            cancellationPolicy: data.cancellationPolicy || 'flexible',
+            host: { name: user.name, avatar: user.avatar, since: new Date().getFullYear().toString(), bio: user.bio || '' }
+        });
+        return { success: true, experience: exp };
+    }
+};
+
+// ═══════════════════════════════════════════════
+// ADMINISTRACIÓN
+// ═══════════════════════════════════════════════
+const Admin = {
+    getPendingHosts() {
+        return DB.findAll('hosts', h => h.verificationStatus === 'pendiente')
+            .map(h => { const u = DB.findById('users', h.userId); return { ...h, userName: u ? u.name : '—', userEmail: u ? u.email : '' }; });
+    },
+
+    getAllHosts() {
+        return DB.findAll('hosts')
+            .map(h => { const u = DB.findById('users', h.userId); return { ...h, userName: u ? u.name : '—', userEmail: u ? u.email : '' }; });
+    },
+
+    approveHost(hostId) {
+        const host = DB.findById('hosts', hostId);
+        if (!host) return { success: false, message: 'No encontrado' };
+        DB.update('hosts', hostId, { verificationStatus: 'verificado', verificationDate: new Date().toISOString() });
+        DB.update('users', host.userId, { role: 'anfitrion' });
+        const cur = Auth.getCurrentUser();
+        if (cur && cur.id === host.userId) Storage.set('currentUser', { ...cur, role: 'anfitrion' });
+        Notifications.create(host.userId, 'sistema', '¡Solicitud aprobada!',
+            'Tu solicitud para ser anfitrión ha sido aprobada. Ya puedes publicar y gestionar experiencias.',
+            'dashboard-anfitrion.html');
+        return { success: true };
+    },
+
+    rejectHost(hostId, reason) {
+        const host = DB.findById('hosts', hostId);
+        if (!host) return { success: false, message: 'No encontrado' };
+        DB.update('hosts', hostId, { verificationStatus: 'rechazado', rejectionReason: reason || '' });
+        Notifications.create(host.userId, 'sistema', 'Solicitud de anfitrión revisada',
+            `Tu solicitud no fue aprobada${reason ? ': ' + reason : '. Puedes actualizar tu información e intentarlo nuevamente.'}`,
+            'anfitrion.html');
+        return { success: true };
+    },
+
+    getAllUsers() {
+        return DB.findAll('users').map(u => { const c = { ...u }; delete c.password; return c; });
+    },
+
+    getAllBookings() {
+        return DB.findAll('bookings').sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
 };
 
@@ -827,6 +916,7 @@ const Components = {
                         ${isLoggedIn ? `
                             <a href="favoritos.html" class="nav-link ${currentPage === 'favoritos.html' ? 'nav-link-active' : ''}">Favoritos</a>
                             ${isHost ? `<a href="dashboard-anfitrion.html" class="nav-link ${currentPage === 'dashboard-anfitrion.html' ? 'nav-link-active' : ''}">Dashboard</a>` : ''}
+                            ${user && user.role === 'admin' ? `<a href="admin.html" class="nav-link ${currentPage === 'admin.html' ? 'nav-link-active' : ''}" style="color: var(--color-earth);">Admin</a>` : ''}
                             <div class="nav-user" onclick="window.location.href='perfil.html'">
                                 ${unreadCount > 0 ? `<span class="notif-badge">${unreadCount > 9 ? '9+' : unreadCount}</span>` : ''}
                                 <span class="nav-user-name">${user.name.split(' ')[0]}</span>
@@ -850,6 +940,7 @@ const Components = {
                     ${isLoggedIn ? `
                         <a href="favoritos.html" class="nav-link">Favoritos</a>
                         ${isHost ? `<a href="dashboard-anfitrion.html" class="nav-link">Dashboard</a>` : ''}
+                        ${user && user.role === 'admin' ? `<a href="admin.html" class="nav-link">Panel Admin</a>` : ''}
                         <a href="perfil.html" class="nav-link">Mi Perfil ${unreadCount > 0 ? `<span class="notif-badge-mobile">${unreadCount}</span>` : ''}</a>
                     ` : `
                         <a href="login.html" class="nav-link">Iniciar sesión</a>
@@ -1052,6 +1143,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
 
+    // Auto-observe fade-up elements added dynamically (fixes experience cards rendered via JS)
+    const mutObserver = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType !== 1) return;
+                const els = node.classList && node.classList.contains('fade-up') ? [node] : [];
+                if (node.querySelectorAll) els.push(...node.querySelectorAll('.fade-up'));
+                els.forEach(el => fadeObserver.observe(el));
+            });
+        });
+    });
+    mutObserver.observe(document.body, { childList: true, subtree: true });
+
     // Wishlist buttons
     document.addEventListener('click', function (e) {
         if (e.target.closest('.btn-wishlist')) {
@@ -1132,12 +1236,14 @@ window.EcoXperiencia = {
     Reviews,
     Notifications,
     Host,
+    Admin,
     DB,
     Storage,
     Toast,
     Modal,
     Components,
     experiencesData,
+    getAllExperiences,
     icons,
     formatPrice,
     getUrlParam

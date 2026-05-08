@@ -63,6 +63,12 @@
 
                 <!-- Tab: Experiencias -->
                 <div class="tab-panel active" id="tab-experiences">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5); flex-wrap: wrap; gap: var(--space-3);">
+                        <h2 style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-moss);">Mis experiencias</h2>
+                        <button class="btn-submit" id="btnNewExperience" style="width: auto; padding: var(--space-3) var(--space-5); font-size: var(--text-sm);">
+                            + Publicar experiencia
+                        </button>
+                    </div>
                     <div id="experiencesList"></div>
                 </div>
 
@@ -287,6 +293,128 @@
             }
 
             loadExperiences();
+
+            // Nueva experiencia
+            document.getElementById('btnNewExperience').addEventListener('click', () => showExpCreateModal());
+
+            function showExpCreateModal() {
+                const overlay = document.createElement('div');
+                overlay.className = 'exp-create-overlay';
+                overlay.innerHTML = `
+                    <div class="exp-create-modal">
+                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--space-6);">
+                            <h3 style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-moss);">Publicar nueva experiencia</h3>
+                            <button id="btnCloseExpModal" style="background:none;border:none;cursor:pointer;color:var(--color-gray-500);padding:var(--space-1);">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                        <form id="expCreateForm">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4);">
+                                <div class="form-group" style="grid-column:1/-1;">
+                                    <label for="expTitle">Título *</label>
+                                    <input type="text" id="expTitle" required placeholder="Ej: Trekking al Nevado del Ruiz">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expCategory">Categoría *</label>
+                                    <select id="expCategory" required>
+                                        <option value="">Seleccionar</option>
+                                        <option value="hiking">Senderismo</option>
+                                        <option value="wildlife">Avistamiento</option>
+                                        <option value="camping">Camping</option>
+                                        <option value="rivers">Ríos y cascadas</option>
+                                        <option value="agrotourism">Agroturismo</option>
+                                        <option value="highmountain">Alta montaña</option>
+                                        <option value="diving">Buceo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expLocation">Ubicación *</label>
+                                    <input type="text" id="expLocation" required placeholder="Ej: Manizales, Caldas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expPrice">Precio por persona (COP) *</label>
+                                    <input type="number" id="expPrice" required placeholder="150000" min="1000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expDuration">Duración</label>
+                                    <input type="text" id="expDuration" placeholder="Ej: 8 horas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expMaxPeople">Máx. participantes</label>
+                                    <input type="number" id="expMaxPeople" placeholder="10" min="1">
+                                </div>
+                                <div class="form-group" style="grid-column:1/-1;">
+                                    <label for="expDescription">Descripción *</label>
+                                    <textarea id="expDescription" rows="4" required placeholder="Describe la experiencia, qué vivirán los participantes..."></textarea>
+                                </div>
+                                <div class="form-group" style="grid-column:1/-1;">
+                                    <label for="expIncludes">¿Qué incluye? (separado por comas)</label>
+                                    <input type="text" id="expIncludes" placeholder="Guía local, Refrigerio, Seguro de viaje">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expMeetingPoint">Punto de encuentro</label>
+                                    <input type="text" id="expMeetingPoint" placeholder="Ej: Plaza central, 7:00 AM">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expCancellation">Política de cancelación</label>
+                                    <select id="expCancellation">
+                                        <option value="flexible">Flexible (hasta 24h antes)</option>
+                                        <option value="moderada">Moderada (hasta 5 días antes)</option>
+                                        <option value="estricta">Estricta (no reembolsable)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="grid-column:1/-1;">
+                                    <label for="expImage">URL de imagen (opcional)</label>
+                                    <input type="url" id="expImage" placeholder="https://images.unsplash.com/...">
+                                </div>
+                            </div>
+                            <div id="expCreateError" class="error-message"></div>
+                            <button type="submit" class="btn-submit" style="margin-top: var(--space-4);">Publicar experiencia</button>
+                        </form>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+                requestAnimationFrame(() => overlay.classList.add('active'));
+
+                overlay.querySelector('#btnCloseExpModal').addEventListener('click', () => {
+                    overlay.classList.remove('active');
+                    setTimeout(() => overlay.remove(), 300);
+                });
+
+                overlay.querySelector('#expCreateForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const errEl = overlay.querySelector('#expCreateError');
+                    errEl.textContent = '';
+                    errEl.classList.remove('show');
+
+                    const result = Host.createExperience({
+                        title: overlay.querySelector('#expTitle').value,
+                        categoryId: overlay.querySelector('#expCategory').value,
+                        location: overlay.querySelector('#expLocation').value,
+                        price: overlay.querySelector('#expPrice').value,
+                        duration: overlay.querySelector('#expDuration').value,
+                        maxPeople: overlay.querySelector('#expMaxPeople').value,
+                        description: overlay.querySelector('#expDescription').value,
+                        includes: overlay.querySelector('#expIncludes').value,
+                        meetingPoint: overlay.querySelector('#expMeetingPoint').value,
+                        cancellationPolicy: overlay.querySelector('#expCancellation').value,
+                        image: overlay.querySelector('#expImage').value
+                    });
+
+                    if (result.success) {
+                        overlay.classList.remove('active');
+                        setTimeout(() => overlay.remove(), 300);
+                        EcoXperiencia.Toast.show('¡Experiencia publicada exitosamente!');
+                        // Refresh stats and list
+                        const updMyExp = Host.getMyExperiences();
+                        document.getElementById('statExperiences').textContent = updMyExp.length;
+                        loadExperiences();
+                    } else {
+                        errEl.textContent = result.message;
+                        errEl.classList.add('show');
+                    }
+                });
+            }
         });
     </script>
 </body>

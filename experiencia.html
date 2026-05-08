@@ -171,12 +171,13 @@
     <script src="js/app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const { Auth, Bookings, Reviews, Favorites, Toast, experiencesData, formatPrice, getUrlParam } = EcoXperiencia;
+            const { Auth, Bookings, Reviews, Favorites, Toast, getAllExperiences, formatPrice, getUrlParam } = EcoXperiencia;
 
-            const experienceId = parseInt(getUrlParam('id'));
+            const rawId = getUrlParam('id');
+            const experienceId = rawId ? (parseInt(rawId) || rawId) : null;
             if (!experienceId) { window.location.href = '404.html'; return; }
 
-            const experience = experiencesData.find(e => e.id === experienceId);
+            const experience = getAllExperiences().find(e => String(e.id) === String(experienceId));
             if (!experience) { window.location.href = '404.html'; return; }
 
             // Populate basic data
@@ -268,39 +269,186 @@
                 Toast.show(Favorites.isFavorite(experience.id) ? 'Agregado a favoritos' : 'Eliminado de favoritos');
             });
 
-            // Book button
+            // Book button — opens payment simulation
             document.getElementById('btnBook').addEventListener('click', () => {
                 if (!Auth.isLoggedIn()) {
                     Toast.show('Inicia sesión para reservar', 'error');
                     setTimeout(() => window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href), 1500);
                     return;
                 }
-
                 const date = bookingDate.value;
                 if (!date) { Toast.show('Selecciona una fecha', 'error'); return; }
 
-                const result = Bookings.create({
-                    experienceId: experience.id,
-                    date: date,
-                    time: document.getElementById('bookingTime').value,
-                    guests: document.getElementById('bookingGuests').value,
-                    notes: document.getElementById('bookingNotes').value
+                const guests = parseInt(document.getElementById('bookingGuests').value);
+                const total = experience.price * guests;
+                showPaymentModal(total, guests, date, () => {
+                    const result = Bookings.create({
+                        experienceId: experience.id,
+                        date: date,
+                        time: document.getElementById('bookingTime').value,
+                        guests: guests,
+                        notes: document.getElementById('bookingNotes').value
+                    });
+                    if (result.success) {
+                        showBookingSuccess(result.booking);
+                    } else {
+                        Toast.show(result.message || 'Error al crear la reserva', 'error');
+                    }
+                });
+            });
+
+            function showPaymentModal(total, guests, date, onSuccess) {
+                const overlay = document.createElement('div');
+                overlay.className = 'payment-overlay';
+                overlay.innerHTML = `
+                    <div class="payment-modal">
+                        <div class="payment-modal-header">
+                            <div>
+                                <h3>Pago seguro</h3>
+                                <span class="payment-sim-badge">SIMULACIÓN</span>
+                            </div>
+                            <button class="payment-close" id="btnPayClose" type="button">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                        <div class="payment-summary-box">
+                            <div class="payment-summary-row"><span>${experience.title}</span><span>${guests} persona${guests > 1 ? 's' : ''}</span></div>
+                            <div class="payment-summary-row"><span>Fecha</span><span>${new Date(date + 'T12:00:00').toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' })}</span></div>
+                            <div class="payment-summary-total"><span>Total a pagar</span><strong>${formatPrice(total)}</strong></div>
+                        </div>
+                        <form id="paymentForm">
+                            <div class="payment-methods-icons">
+                                <span class="payment-card-icon">VISA</span>
+                                <span class="payment-card-icon">MC</span>
+                                <span class="payment-card-icon">PSE</span>
+                                <span class="payment-card-icon">NEQUI</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="payCardNumber">Número de tarjeta</label>
+                                <input type="text" id="payCardNumber" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
+                            </div>
+                            <div class="form-group">
+                                <label for="payCardHolder">Titular</label>
+                                <input type="text" id="payCardHolder" placeholder="Juan Pérez" autocomplete="cc-name">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                                <div class="form-group">
+                                    <label for="payExpiry">Vencimiento</label>
+                                    <input type="text" id="payExpiry" placeholder="MM/AA" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="payCvv">CVV</label>
+                                    <input type="text" id="payCvv" placeholder="•••" maxlength="3">
+                                </div>
+                            </div>
+                            <div id="paymentError" class="error-message"></div>
+                            <button type="submit" class="btn-pay">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                Pagar ${formatPrice(total)}
+                            </button>
+                            <p class="payment-secure-note">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                Entorno de simulación — ningún dato es real
+                            </p>
+                        </form>
+                        <div id="paymentProcessing" style="display:none;" class="payment-processing">
+                            <div class="payment-spinner"></div>
+                            <p>Procesando pago...</p>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+                requestAnimationFrame(() => overlay.classList.add('active'));
+
+                overlay.querySelector('#btnPayClose').addEventListener('click', () => {
+                    overlay.classList.remove('active');
+                    setTimeout(() => overlay.remove(), 300);
                 });
 
-                if (result.success) {
-                    const overlay = EcoXperiencia.Modal.show(
-                        '¡Reserva confirmada!',
-                        `Tu reserva para "${experience.title}" está confirmada.\n\nFecha: ${date}\nPersonas: ${result.booking.guests}\nTotal: ${formatPrice(result.booking.totalPrice)}\nCódigo: ${result.booking.confirmationCode}`,
-                        [
-                            { text: 'Ver mis reservas', class: 'btn-secondary', onClick: "window.location.href='perfil.html#bookings'" },
-                            { text: 'Continuar explorando', class: 'btn-submit', onClick: "window.location.href='explorar.html'" }
-                        ]
-                    );
-                    loadReviews();
-                } else {
-                    Toast.show(result.message || 'Error al crear la reserva', 'error');
-                }
-            });
+                overlay.querySelector('#payCardNumber').addEventListener('input', function () {
+                    const v = this.value.replace(/\D/g, '').slice(0, 16);
+                    this.value = v.replace(/(.{4})/g, '$1 ').trim();
+                });
+                overlay.querySelector('#payExpiry').addEventListener('input', function () {
+                    const v = this.value.replace(/\D/g, '').slice(0, 4);
+                    this.value = v.length > 2 ? v.slice(0, 2) + '/' + v.slice(2) : v;
+                });
+                overlay.querySelector('#payCvv').addEventListener('input', function () {
+                    this.value = this.value.replace(/\D/g, '').slice(0, 3);
+                });
+
+                overlay.querySelector('#paymentForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const errEl = overlay.querySelector('#paymentError');
+                    errEl.textContent = '';
+                    errEl.classList.remove('show');
+
+                    const num = overlay.querySelector('#payCardNumber').value.replace(/\s/g, '');
+                    const holder = overlay.querySelector('#payCardHolder').value.trim();
+                    const exp = overlay.querySelector('#payExpiry').value;
+                    const cvv = overlay.querySelector('#payCvv').value;
+
+                    if (num.length < 16) { errEl.textContent = 'Número de tarjeta inválido'; errEl.classList.add('show'); return; }
+                    if (!holder) { errEl.textContent = 'Ingresa el nombre del titular'; errEl.classList.add('show'); return; }
+                    if (exp.length < 5) { errEl.textContent = 'Fecha de vencimiento inválida'; errEl.classList.add('show'); return; }
+                    if (cvv.length < 3) { errEl.textContent = 'CVV inválido'; errEl.classList.add('show'); return; }
+
+                    overlay.querySelector('#paymentForm').style.display = 'none';
+                    overlay.querySelector('#paymentProcessing').style.display = 'flex';
+
+                    setTimeout(() => {
+                        overlay.classList.remove('active');
+                        setTimeout(() => { overlay.remove(); onSuccess(); }, 300);
+                    }, 2000);
+                });
+            }
+
+            function showBookingSuccess(booking) {
+                const successOverlay = document.createElement('div');
+                successOverlay.className = 'modal-overlay';
+                successOverlay.innerHTML = `
+                    <div class="modal">
+                        <div class="modal-icon" style="color: #22c55e;">
+                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/>
+                            </svg>
+                        </div>
+                        <h3>¡Pago exitoso!</h3>
+                        <p style="color: var(--color-gray-600); margin-bottom: var(--space-4);">Tu reserva está confirmada</p>
+                        <div style="background: var(--color-cream); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-6); text-align: left; font-size: var(--text-sm);">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
+                                <span style="color: var(--color-gray-500);">Código</span>
+                                <strong style="color: var(--color-moss); font-family: monospace; font-size: var(--text-base);">${booking.confirmationCode}</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
+                                <span style="color: var(--color-gray-500);">Fecha</span>
+                                <span>${new Date(booking.date + 'T12:00:00').toLocaleDateString('es-CO', { weekday: 'short', day: 'numeric', month: 'short' })}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
+                                <span style="color: var(--color-gray-500);">Personas</span>
+                                <span>${booking.guests} persona${booking.guests > 1 ? 's' : ''}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--color-gray-500);">Total pagado</span>
+                                <strong>$${booking.totalPrice.toLocaleString('es-CO')} COP</strong>
+                            </div>
+                        </div>
+                        <div class="modal-buttons">
+                            <button class="btn-secondary" onclick="window.location.href='perfil.html#bookings'">Mis reservas</button>
+                            <button class="btn-submit" onclick="window.location.href='explorar.html'">Explorar más</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(successOverlay);
+                requestAnimationFrame(() => successOverlay.classList.add('active'));
+                successOverlay.addEventListener('click', e => {
+                    if (e.target === successOverlay) {
+                        successOverlay.classList.remove('active');
+                        setTimeout(() => successOverlay.remove(), 300);
+                    }
+                });
+                loadReviews();
+            }
 
             // --- REVIEWS ---
             function loadReviews() {

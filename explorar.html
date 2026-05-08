@@ -108,7 +108,7 @@
                 const location = locationFilter.value.toLowerCase();
                 const search = searchFilter.value.toLowerCase();
 
-                let filtered = EcoXperiencia.experiencesData.filter(exp => {
+                let filtered = EcoXperiencia.getAllExperiences().filter(exp => {
                     if (category && exp.categoryId !== category) return false;
                     if (maxPrice && exp.price > maxPrice) return false;
                     if (location && !exp.location.toLowerCase().includes(location)) return false;
@@ -147,7 +147,7 @@
                 priceFilter.value = '';
                 locationFilter.value = '';
                 searchFilter.value = '';
-                renderExperiences(EcoXperiencia.experiencesData);
+                renderExperiences(EcoXperiencia.getAllExperiences());
             });
 
             // Initial render

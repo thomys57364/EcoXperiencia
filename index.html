@@ -314,7 +314,7 @@
         // Load featured experiences
         document.addEventListener('DOMContentLoaded', function() {
             const grid = document.getElementById('experiencesGrid');
-            const featuredExperiences = EcoXperiencia.experiencesData.slice(0, 6);
+            const featuredExperiences = EcoXperiencia.getAllExperiences().slice(0, 6);
 
             grid.innerHTML = featuredExperiences.map(exp => EcoXperiencia.Components.experienceCard(exp)).join('');
 
