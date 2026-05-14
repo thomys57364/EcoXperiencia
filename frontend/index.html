@@ -343,15 +343,17 @@
                 window.location.href = 'explorar.html?' + params.toString();
             });
 
-            // Navbar scroll effect for hero
+            // Navbar transparent on hero, solid after scrolling
             const navbar = document.querySelector('.navbar');
-            window.addEventListener('scroll', () => {
+            function updateNavbarHero() {
                 if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
+                    navbar.classList.remove('navbar-hero');
                 } else {
-                    navbar.classList.remove('scrolled');
+                    navbar.classList.add('navbar-hero');
                 }
-            }, { passive: true });
+            }
+            updateNavbarHero();
+            window.addEventListener('scroll', updateNavbarHero, { passive: true });
         });
     </script>
 </body>

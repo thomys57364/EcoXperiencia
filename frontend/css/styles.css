@@ -197,7 +197,15 @@ input, select, textarea {
     right: 0;
     z-index: 1000;
     padding: var(--space-4) 0;
+    background-color: var(--color-off-white);
+    box-shadow: var(--shadow-md);
     transition: background-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+/* Transparent variant — only used on index.html hero when at top */
+.navbar.navbar-hero {
+    background-color: transparent;
+    box-shadow: none;
 }
 
 .navbar.scrolled {
@@ -218,8 +226,12 @@ input, select, textarea {
     font-family: var(--font-display);
     font-size: var(--text-xl);
     font-weight: 700;
-    color: var(--color-off-white);
+    color: var(--color-moss);
     transition: color var(--transition-base);
+}
+
+.navbar.navbar-hero .navbar-logo {
+    color: var(--color-off-white);
 }
 
 .navbar.scrolled .navbar-logo {
@@ -246,9 +258,13 @@ input, select, textarea {
 .nav-link {
     font-size: var(--text-sm);
     font-weight: 500;
-    color: var(--color-off-white);
+    color: var(--color-gray-700);
     transition: color var(--transition-fast);
     position: relative;
+}
+
+.navbar.navbar-hero .nav-link {
+    color: var(--color-off-white);
 }
 
 .navbar.scrolled .nav-link {
@@ -256,6 +272,10 @@ input, select, textarea {
 }
 
 .nav-link:hover {
+    color: var(--color-moss);
+}
+
+.navbar.navbar-hero .nav-link:hover {
     color: var(--color-lime);
 }
 
@@ -315,8 +335,12 @@ input, select, textarea {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    color: var(--color-off-white);
+    color: var(--color-gray-700);
     cursor: pointer;
+}
+
+.navbar.navbar-hero .nav-user {
+    color: var(--color-off-white);
 }
 
 .navbar.scrolled .nav-user {
@@ -365,8 +389,12 @@ input, select, textarea {
 .mobile-menu-btn span {
     width: 24px;
     height: 2px;
-    background-color: var(--color-off-white);
+    background-color: var(--color-moss);
     transition: all var(--transition-base);
+}
+
+.navbar.navbar-hero .mobile-menu-btn span {
+    background-color: var(--color-off-white);
 }
 
 .navbar.scrolled .mobile-menu-btn span {
