@@ -6,7 +6,7 @@
 // Configuration
 // IMPORTANTE: Cambia esta URL a tu dominio de Railway después de desplegar el backend
 // Ejemplo: const API_BASE_URL = 'https://ecoxperiencia-backend-production.up.railway.app';
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://ecoxperiencia.onrender.com';
 const TOKEN_KEY = 'ecoxperiencia_token';
 const CURRENT_USER_KEY = 'ecoxperiencia_currentUser';
 const FAVORITES_KEY = 'ecoxperiencia_favorites';
