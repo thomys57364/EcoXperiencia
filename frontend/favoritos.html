@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Favoritos - EcoXperiencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navbar will be injected here -->
+  <nav id="navbar-container"></nav>
+
+  <!-- Page Header -->
+  <section class="detail-header">
+    <div class="container">
+      <h1 class="detail-title">❤️ Mis Favoritos</h1>
+      <p style="color: rgba(255,255,255,0.9); margin: 0;">Tus experiencias guardadas</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-cols-3" id="favorites-container">
+        <!-- Favorites will be loaded here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer will be injected here -->
+  <footer id="footer-container"></footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      requireLogin();
+
+      const container = document.getElementById('favorites-container');
+      container.innerHTML = Components.loadingSpinner();
+
+      try {
+        const favorites = await Favorites.getExperiences();
+
+        container.innerHTML = '';
+
+        if (!favorites || favorites.length === 0) {
+          container.innerHTML = Components.emptyState(
+            '💭',
+            'Sin favoritos aún',
+            'Guarda tus experiencias favoritas para acceder a ellas fácilmente'
+          );
+          return;
+        }
+
+        favorites.forEach((exp, index) => {
+          const card = document.createElement('div');
+          card.innerHTML = Components.experienceCard(exp);
+          card.style.animationDelay = `${index * 0.05}s`;
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error loading favorites:', error);
+        container.innerHTML = Components.emptyState(
+          '❌',
+          'Error al cargar',
+          'No pudimos cargar tus favoritos. Por favor, intenta más tarde.'
+        );
+      }
+    });
+  </script>
+</body>
+</html>

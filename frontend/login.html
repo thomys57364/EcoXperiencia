@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión - EcoXperiencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--color-cream) 0%, var(--color-off-white) 100%);
+      padding: var(--space-6);
+    }
+    .auth-card {
+      background: white;
+      padding: var(--space-8);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      max-width: 400px;
+      width: 100%;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: var(--space-8);
+    }
+    .auth-header h1 {
+      font-size: var(--font-size-2xl);
+      margin-bottom: var(--space-2);
+    }
+    .auth-header p {
+      color: var(--color-text-light);
+      margin-bottom: 0;
+    }
+    .auth-divider {
+      text-align: center;
+      margin: var(--space-6) 0;
+      color: var(--color-text-light);
+      font-size: var(--font-size-sm);
+    }
+    .auth-link {
+      text-align: center;
+      margin-top: var(--space-6);
+      color: var(--color-text-light);
+    }
+    .auth-link a {
+      color: var(--color-moss);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>🌿 EcoXperiencia</h1>
+        <p>Inicia sesión en tu cuenta</p>
+      </div>
+
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input 
+            type="email" 
+            id="email" 
+            class="form-control" 
+            placeholder="tu@email.com"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-control" 
+            placeholder="Tu contraseña"
+            required
+          >
+        </div>
+
+        <label class="checkbox">
+          <input type="checkbox" id="remember">
+          <span>Recuérdame en este dispositivo</span>
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-block mt-6">Iniciar sesión</button>
+      </form>
+
+      <div class="auth-link">
+        ¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>
+      </div>
+
+      <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--color-border);">
+        <p style="color: var(--color-text-light); font-size: var(--font-size-sm); margin-bottom: var(--space-4);">
+          <strong>Credenciales de demo:</strong>
+        </p>
+        <p style="color: var(--color-text-lighter); font-size: var(--font-size-xs); margin: var(--space-2) 0;">
+          Email: <code>demo@ecoxperiencia.com</code>
+        </p>
+        <p style="color: var(--color-text-lighter); font-size: var(--font-size-xs); margin: var(--space-2) 0;">
+          Password: <code>123456</code>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    async function handleLogin(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        Toast.show('Por favor, completa todos los campos', 'error');
+        return;
+      }
+
+      const button = e.target.querySelector('button[type="submit"]');
+      button.disabled = true;
+      button.textContent = 'Iniciando...';
+
+      const success = await Auth.login(email, password);
+
+      if (success) {
+        const params = getURLParams();
+        const redirect = params.redirect || 'index.html';
+        setTimeout(() => {
+          window.location.href = redirect;
+        }, 1500);
+      } else {
+        button.disabled = false;
+        button.textContent = 'Iniciar sesión';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoXperiencia - Turismo Sostenible en Colombia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navbar will be injected here -->
+  <nav id="navbar-container"></nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Descubre Experiencias Auténticas en Colombia</h1>
+      <p>Conecta con la naturaleza y la cultura local de una forma sostenible y responsable</p>
+      
+      <form class="search-box" onsubmit="searchExperiences(event)">
+        <div class="search-box-group">
+          <label class="search-box-label">📍 Destino</label>
+          <input type="text" id="search-location" placeholder="Boyacá, Amazonas, etc." required>
+        </div>
+        <div class="search-box-group">
+          <label class="search-box-label">📅 Fecha</label>
+          <input type="date" id="search-date" required>
+        </div>
+        <div class="search-box-group">
+          <label class="search-box-label">👥 Personas</label>
+          <input type="number" id="search-guests" min="1" value="1" required>
+        </div>
+        <button type="submit" class="btn btn-lg btn-primary" style="height: fit-content; align-self: flex-end;">Buscar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Categorías de Experiencias</h2>
+        <p class="section-subtitle">Elige el tipo de aventura que buscas</p>
+      </div>
+      <div class="categories-grid" id="categories-container">
+        <!-- Categories will be loaded here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Experiences Section -->
+  <section class="section" style="background-color: var(--color-cream);">
+    <div class="container">
+      <div class="section-title">
+        <h2>Experiencias Destacadas</h2>
+        <p class="section-subtitle">Las mejores experiencias seleccionadas para ti</p>
+      </div>
+      <div class="grid grid-cols-3" id="featured-container">
+        <!-- Featured experiences will be loaded here -->
+      </div>
+      <div style="text-align: center; margin-top: var(--space-8);">
+        <a href="explorar.html" class="btn btn-primary btn-lg">Ver todas las experiencias</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Cómo Funciona</h2>
+        <p class="section-subtitle">4 pasos simples para tu próxima aventura</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step animate-fade-up" style="animation-delay: 0.1s;">
+          <div class="step-number">1</div>
+          <h4 class="step-title">Explora</h4>
+          <p class="step-description">Navega por nuestras experiencias únicas en Colombia</p>
+        </div>
+        <div class="step animate-fade-up" style="animation-delay: 0.2s;">
+          <div class="step-number">2</div>
+          <h4 class="step-title">Elige</h4>
+          <p class="step-description">Selecciona la experiencia que más te interese</p>
+        </div>
+        <div class="step animate-fade-up" style="animation-delay: 0.3s;">
+          <div class="step-number">3</div>
+          <h4 class="step-title">Reserva</h4>
+          <p class="step-description">Completa tu reserva de forma segura en minutos</p>
+        </div>
+        <div class="step animate-fade-up" style="animation-delay: 0.4s;">
+          <div class="step-number">4</div>
+          <h4 class="step-title">Vive</h4>
+          <p class="step-description">¡Disfruta de la experiencia al máximo!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="section" style="background-color: var(--color-cream);">
+    <div class="container">
+      <div class="section-title">
+        <h2>Lo Que Dicen Nuestros Viajeros</h2>
+        <p class="section-subtitle">Historias reales de aventureros que ya visitaron Colombia</p>
+      </div>
+      <div class="grid grid-cols-3">
+        <div class="testimonial-card animate-fade-up" style="animation-delay: 0.1s;">
+          <div class="testimonial-content">
+            "Una experiencia increíble. El guía fue muy amable y conocedor. Recomiendo totalmente EcoXperiencia."
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MA</div>
+            <div class="testimonial-info">
+              <h4 class="testimonial-name">María Andrés</h4>
+              <p class="testimonial-role">Viajero verificado</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card animate-fade-up" style="animation-delay: 0.2s;">
+          <div class="testimonial-content">
+            "Perfectamente organizado. Los detalles importan y EcoXperiencia se nota que se preocupa por cada visitante."
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">JC</div>
+            <div class="testimonial-info">
+              <h4 class="testimonial-name">Juan Campos</h4>
+              <p class="testimonial-role">Viajero verificado</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card animate-fade-up" style="animation-delay: 0.3s;">
+          <div class="testimonial-content">
+            "Turismo responsable de verdad. Sentí que estábamos contribuyendo positivamente al medioambiente."
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SG</div>
+            <div class="testimonial-info">
+              <h4 class="testimonial-name">Sofia García</h4>
+              <p class="testimonial-role">Viajero verificado</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>2,500+</h3>
+          <p>Viajeros satisfechos</p>
+        </div>
+        <div class="stat-item">
+          <h3>150+</h3>
+          <p>Experiencias únicas</p>
+        </div>
+        <div class="stat-item">
+          <h3>32</h3>
+          <p>Departamentos cubiertos</p>
+        </div>
+        <div class="stat-item">
+          <h3>98%</h3>
+          <p>Calificación promedio</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section" style="background: linear-gradient(135deg, var(--color-moss) 0%, var(--color-moss-light) 100%); color: white;">
+    <div class="container text-center">
+      <h2 style="color: white; margin-bottom: var(--space-4);">¿Listo para tu próxima aventura?</h2>
+      <p style="color: rgba(255,255,255,0.95); margin-bottom: var(--space-8); font-size: var(--font-size-lg);">
+        Únete a miles de viajeros que ya están viviendo experiencias auténticas
+      </p>
+      <a href="explorar.html" class="btn btn-lg" style="background-color: var(--color-lime); color: white;">Explorar ahora</a>
+    </div>
+  </section>
+
+  <!-- Footer will be injected here -->
+  <footer id="footer-container"></footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Set minimum date to today
+      const today = formatDateForInput(new Date());
+      document.getElementById('search-date').value = today;
+      document.getElementById('search-date').min = today;
+
+      // Load categories
+      const categories = await Categories.getAll();
+      const categoriesContainer = document.getElementById('categories-container');
+      
+      categories.forEach((cat, index) => {
+        const categoryEl = document.createElement('div');
+        categoryEl.className = 'category-item animate-fade-up';
+        categoryEl.style.animationDelay = `${index * 0.1}s`;
+        categoryEl.innerHTML = `
+          <div class="category-icon">${getIconForCategory(cat.slug)}</div>
+          <h4 class="category-name">${cat.nombre}</h4>
+          <p class="category-description">${cat.descripcion || ''}</p>
+        `;
+        categoryEl.addEventListener('click', () => {
+          window.location.href = `explorar.html?category=${cat.slug}`;
+        });
+        categoriesContainer.appendChild(categoryEl);
+      });
+
+      // Load featured experiences
+      const experiences = await Experiences.getAll();
+      const featuredContainer = document.getElementById('featured-container');
+      
+      experiences.slice(0, 6).forEach((exp, index) => {
+        const card = document.createElement('div');
+        card.innerHTML = Components.experienceCard(exp);
+        card.style.animationDelay = `${index * 0.1}s`;
+        featuredContainer.appendChild(card);
+      });
+    });
+
+    function searchExperiences(e) {
+      e.preventDefault();
+      const location = document.getElementById('search-location').value;
+      const date = document.getElementById('search-date').value;
+      const guests = document.getElementById('search-guests').value;
+
+      const params = new URLSearchParams({
+        location: location,
+        date: date,
+        guests: guests,
+      });
+
+      window.location.href = `explorar.html?${params.toString()}`;
+    }
+
+    function getIconForCategory(slug) {
+      const icons = {
+        hiking: '🥾',
+        wildlife: '🦁',
+        camping: '⛺',
+        rivers: '🌊',
+        agrotourism: '🌾',
+        highmountain: '⛰️',
+        diving: '🤿',
+        other: '🌿',
+      };
+      return icons[slug] || icons.other;
+    }
+  </script>
+</body>
+</html>

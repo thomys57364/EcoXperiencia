@@ -1,0 +1,5 @@
+// Prisma configuration is defined in prisma/schema.prisma
+// This file is not typically needed in NestJS projects
+// Prisma client is auto-generated from prisma/schema.prisma
+
+export {};

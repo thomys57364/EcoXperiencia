@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explorar Experiencias - EcoXperiencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navbar will be injected here -->
+  <nav id="navbar-container"></nav>
+
+  <!-- Page Header -->
+  <section class="detail-header">
+    <div class="container">
+      <h1 class="detail-title">Explorar Experiencias</h1>
+      <div class="detail-meta">
+        <span>🌿 Turismo sostenible</span>
+        <span>📍 En toda Colombia</span>
+        <span>⭐ Experiencias verificadas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="section">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 280px 1fr; gap: var(--space-8);">
+        
+        <!-- Filters Sidebar -->
+        <aside>
+          <div class="filters-container">
+            <h3 class="filters-title">🔍 Filtros</h3>
+            
+            <div class="filter-group">
+              <label>Búsqueda general</label>
+              <input 
+                type="text" 
+                id="filter-search" 
+                placeholder="Buscar experiencia..."
+                onkeyup="applyFilters()"
+              >
+            </div>
+
+            <div class="filter-group">
+              <label>Categoría</label>
+              <select id="filter-category" onchange="applyFilters()">
+                <option value="">Todas las categorías</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Precio máximo</label>
+              <input 
+                type="number" 
+                id="filter-price" 
+                placeholder="Máximo en COP"
+                onkeyup="applyFilters()"
+              >
+            </div>
+
+            <div class="filter-group">
+              <label>Ubicación</label>
+              <input 
+                type="text" 
+                id="filter-location" 
+                placeholder="Departamento..."
+                onkeyup="applyFilters()"
+              >
+            </div>
+
+            <button class="filter-btn" onclick="applyFilters()">Aplicar filtros</button>
+            <button class="clear-filters" onclick="clearFilters()">Limpiar filtros</button>
+          </div>
+        </aside>
+
+        <!-- Results -->
+        <main>
+          <div class="results-info">
+            <span class="results-count">
+              Mostrando <strong id="result-count">0</strong> resultados
+            </span>
+            <select class="sort-select" id="sort-select" onchange="applyFilters()">
+              <option value="featured">Destacados</option>
+              <option value="price-low">Precio: menor a mayor</option>
+              <option value="price-high">Precio: mayor a menor</option>
+              <option value="rating">Mejor calificados</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-3" id="results-container">
+            <!-- Results will be loaded here -->
+          </div>
+        </main>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer will be injected here -->
+  <footer id="footer-container"></footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    let allExperiences = [];
+    const params = getURLParams();
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Load categories for filter
+      const categories = await Categories.getAll();
+      const categorySelect = document.getElementById('filter-category');
+      
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.slug;
+        option.textContent = cat.nombre;
+        categorySelect.appendChild(option);
+      });
+
+      // Set filters from URL params
+      if (params.location) {
+        document.getElementById('filter-location').value = params.location;
+      }
+      if (params.category) {
+        document.getElementById('filter-category').value = params.category;
+      }
+      if (params.q) {
+        document.getElementById('filter-search').value = params.q;
+      }
+
+      // Load all experiences
+      await loadExperiences();
+    });
+
+    async function loadExperiences() {
+      document.getElementById('results-container').innerHTML = Components.loadingSpinner();
+      
+      try {
+        allExperiences = await Experiences.getAll();
+        applyFilters();
+      } catch (error) {
+        console.error('Error loading experiences:', error);
+        document.getElementById('results-container').innerHTML = Components.emptyState(
+          '❌',
+          'Error al cargar',
+          'No pudimos cargar las experiencias. Por favor, intenta más tarde.'
+        );
+      }
+    }
+
+    function applyFilters() {
+      const searchTerm = document.getElementById('filter-search').value.toLowerCase();
+      const category = document.getElementById('filter-category').value;
+      const maxPrice = parseFloat(document.getElementById('filter-price').value) || Infinity;
+      const location = document.getElementById('filter-location').value.toLowerCase();
+      const sort = document.getElementById('sort-select').value;
+
+      let filtered = allExperiences.filter(exp => {
+        const title = (exp.titulo || exp.title || '').toLowerCase();
+        const desc = (exp.descripcion || exp.description || '').toLowerCase();
+        const expLocation = (exp.ubicacion_texto || exp.location || '').toLowerCase();
+        const expCategory = exp.categoria?.slug || exp.categoryId || '';
+        const price = exp.precio_base || exp.price || 0;
+
+        const matchesSearch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm);
+        const matchesCategory = !category || expCategory === category;
+        const matchesPrice = price <= maxPrice;
+        const matchesLocation = !location || expLocation.includes(location);
+
+        return matchesSearch && matchesCategory && matchesPrice && matchesLocation;
+      });
+
+      // Sort results
+      switch (sort) {
+        case 'price-low':
+          filtered.sort((a, b) => (a.precio_base || a.price || 0) - (b.precio_base || b.price || 0));
+          break;
+        case 'price-high':
+          filtered.sort((a, b) => (b.precio_base || b.price || 0) - (a.precio_base || a.price || 0));
+          break;
+        case 'rating':
+          filtered.sort((a, b) => (b.rating || 4.8) - (a.rating || 4.8));
+          break;
+      }
+
+      // Render results
+      const container = document.getElementById('results-container');
+      const countEl = document.getElementById('result-count');
+
+      if (filtered.length === 0) {
+        container.innerHTML = Components.emptyState(
+          '🔍',
+          'No se encontraron experiencias',
+          'Intenta cambiar tus filtros de búsqueda'
+        );
+        countEl.textContent = '0';
+      } else {
+        container.innerHTML = '';
+        filtered.forEach((exp, index) => {
+          const card = document.createElement('div');
+          card.innerHTML = Components.experienceCard(exp);
+          card.style.animation = 'fadeUp 0.6s ease-out';
+          card.style.animationDelay = `${index * 0.05}s`;
+          container.appendChild(card);
+        });
+        countEl.textContent = filtered.length;
+      }
+    }
+
+    function clearFilters() {
+      document.getElementById('filter-search').value = '';
+      document.getElementById('filter-category').value = '';
+      document.getElementById('filter-price').value = '';
+      document.getElementById('filter-location').value = '';
+      document.getElementById('sort-select').value = 'featured';
+      applyFilters();
+    }
+  </script>
+</body>
+</html>

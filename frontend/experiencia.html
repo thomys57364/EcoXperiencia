@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle de Experiencia - EcoXperiencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navbar will be injected here -->
+  <nav id="navbar-container"></nav>
+
+  <!-- Experience Header -->
+  <section class="detail-header">
+    <div class="container">
+      <h1 class="detail-title" id="exp-title">Cargando...</h1>
+      <div class="detail-meta">
+        <span id="exp-location">📍 Colombia</span>
+        <span id="exp-category">🏷️ Categoría</span>
+        <span id="exp-rating">⭐ 4.8 (127 reseñas)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Content -->
+  <section class="section">
+    <div class="container">
+      <!-- Gallery -->
+      <div class="gallery" id="gallery-container">
+        <!-- Gallery will be loaded here -->
+      </div>
+
+      <!-- Main Content -->
+      <div class="detail-content">
+        <div class="detail-main">
+          
+          <!-- Description Section -->
+          <div class="detail-section">
+            <h3>Acerca de esta experiencia</h3>
+            <p id="exp-description">Cargando descripción...</p>
+          </div>
+
+          <!-- Includes Section -->
+          <div class="detail-section">
+            <h3>¿Qué incluye?</h3>
+            <ul class="includes-list" id="exp-includes">
+              <li>Cargando...</li>
+            </ul>
+          </div>
+
+          <!-- Host Section -->
+          <div class="detail-section">
+            <h3>Conoce al anfitrión</h3>
+            <div class="host-card" id="host-card">
+              <div class="host-avatar" id="host-avatar">--</div>
+              <h4 class="host-name" id="host-name">Cargando...</h4>
+              <p class="host-since" id="host-since">Desde 2020</p>
+              <p class="host-bio" id="host-bio">Guía con experiencia en la región</p>
+            </div>
+          </div>
+
+          <!-- Reviews Section -->
+          <div class="reviews-section">
+            <div class="reviews-header">
+              <div>
+                <h3>Reseñas de viajeros</h3>
+              </div>
+              <div class="review-rating">
+                <div class="review-rating-number" id="avg-rating">4.8</div>
+                <div class="review-rating-text">
+                  <div id="rating-stars">★★★★★</div>
+                  <small id="review-count">(127 reseñas)</small>
+                </div>
+              </div>
+            </div>
+            <div id="reviews-container">
+              <!-- Reviews will be loaded here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Booking Sidebar -->
+        <aside>
+          <div class="booking-card">
+            <div class="booking-header">
+              <div class="booking-price" id="booking-price">$180.000</div>
+              <p class="booking-price-label">por persona</p>
+            </div>
+
+            <form class="booking-form" id="booking-form" onsubmit="submitBooking(event)">
+              <div>
+                <label class="search-box-label">Fecha de inicio</label>
+                <input type="date" id="booking-date" required>
+              </div>
+
+              <div>
+                <label class="search-box-label">Hora de inicio</label>
+                <input type="time" id="booking-time" value="08:00" required>
+              </div>
+
+              <div>
+                <label class="search-box-label">Número de personas</label>
+                <input 
+                  type="number" 
+                  id="booking-persons" 
+                  min="1" 
+                  value="1"
+                  onchange="updateTotal()"
+                  oninput="updateTotal()"
+                  required
+                >
+              </div>
+
+              <div class="booking-summary">
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
+                  <span>Duración:</span>
+                  <strong id="duration-display">12 horas</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span>Personas:</span>
+                  <strong id="persons-display">1</strong>
+                </div>
+              </div>
+
+              <div class="booking-total">
+                <span>Total:</span>
+                <span id="total-price">$180.000</span>
+              </div>
+
+              <button type="submit" class="btn-book">Reservar ahora</button>
+            </form>
+
+            <button class="btn btn-outline w-full mt-4" id="favorite-btn" onclick="toggleFavoriteExp()">
+              ♡ Guardar
+            </button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer will be injected here -->
+  <footer id="footer-container"></footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    let currentExperience = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = getURLParams();
+      const experienceId = params.id;
+
+      if (!experienceId) {
+        window.location.href = '404.html';
+        return;
+      }
+
+      try {
+        currentExperience = await Experiences.getOne(experienceId);
+
+        if (!currentExperience) {
+          window.location.href = '404.html';
+          return;
+        }
+
+        renderExperience();
+        setMinDate();
+      } catch (error) {
+        console.error('Error loading experience:', error);
+        window.location.href = '404.html';
+      }
+    });
+
+    function renderExperience() {
+      const exp = currentExperience;
+
+      // Basic info
+      document.title = `${exp.titulo || exp.title} - EcoXperiencia`;
+      document.getElementById('exp-title').textContent = exp.titulo || exp.title;
+      document.getElementById('exp-location').textContent = `📍 ${exp.ubicacion_texto || exp.location || 'Colombia'}`;
+      document.getElementById('exp-category').textContent = `🏷️ ${exp.categoria?.nombre || exp.category || 'Experiencia'}`;
+      document.getElementById('exp-rating').textContent = `⭐ ${exp.rating || 4.8} (${exp.reviews_count || 127} reseñas)`;
+      document.getElementById('exp-description').textContent = exp.descripcion || exp.description || 'Descripción no disponible';
+
+      // Price
+      const price = exp.precio_base || exp.price || 180000;
+      document.getElementById('booking-price').textContent = `$${price.toLocaleString('es-CO')}`;
+      document.getElementById('total-price').textContent = `$${price.toLocaleString('es-CO')}`;
+
+      // Duration
+      const duration = exp.duracion_horas || 12;
+      document.getElementById('duration-display').textContent = `${duration} horas`;
+
+      // Gallery
+      const gallery = document.getElementById('gallery-container');
+      gallery.innerHTML = '';
+
+      const images = [
+        exp.imagen_url || exp.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=300&h=300&fit=crop',
+      ];
+
+      const mainImg = document.createElement('div');
+      mainImg.className = 'gallery-item gallery-main';
+      mainImg.innerHTML = `<img src="${images[0]}" alt="${exp.titulo}" onerror="this.src='https://via.placeholder.com/600x600'">`;
+      gallery.appendChild(mainImg);
+
+      images.slice(1).forEach(img => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `<img src="${img}" alt="Galería" onerror="this.src='https://via.placeholder.com/300x300'">`;
+        gallery.appendChild(item);
+      });
+
+      // Includes
+      const includesList = document.getElementById('exp-includes');
+      includesList.innerHTML = '';
+
+      const includes = exp.incluye || [
+        'Guía local experto',
+        'Transporte incluido',
+        'Almuerzo típico',
+        'Seguro de viaje',
+        'Fotos profesionales',
+      ];
+
+      includes.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        includesList.appendChild(li);
+      });
+
+      // Host info
+      const hostName = exp.anfitrion?.usuario?.nombre_completo || 'Carlos Martínez';
+      const hostInitials = hostName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+      document.getElementById('host-avatar').textContent = hostInitials;
+      document.getElementById('host-name').textContent = hostName;
+      document.getElementById('host-since').textContent = `Anfitrión desde 2019`;
+      document.getElementById('host-bio').textContent = 'Guía local apasionado por compartir las bellezas naturales de Colombia de manera responsable y sostenible.';
+
+      // Reviews
+      const reviewsContainer = document.getElementById('reviews-container');
+      reviewsContainer.innerHTML = '';
+
+      const reviews = exp.reviews || [
+        {
+          name: 'María González',
+          rating: 5,
+          date: 'Hace 2 semanas',
+          text: 'Una experiencia increíble. El guía fue muy atento y los detalles importaban. Regresaría sin dudarlo.',
+        },
+        {
+          name: 'Juan Martín',
+          rating: 5,
+          date: 'Hace 1 mes',
+          text: 'Perfectamente organizado. La naturaleza es hermosa y el guía conocía cada rincón. Muy recomendable.',
+        },
+        {
+          name: 'Sofia Díaz',
+          rating: 4,
+          date: 'Hace 1 mes',
+          text: 'Muy buena experiencia. Solo sugerencia: llevar más agua en el equipaje.',
+        },
+      ];
+
+      reviews.forEach(review => {
+        const reviewEl = document.createElement('div');
+        reviewEl.className = 'review-item';
+
+        const initials = review.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+        reviewEl.innerHTML = `
+          <div class="review-header">
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">${initials}</div>
+              <div>
+                <div class="reviewer-name">${review.name}</div>
+                <div class="review-date">${review.date}</div>
+              </div>
+            </div>
+            <div class="review-stars">${'★'.repeat(review.rating || 5)}</div>
+          </div>
+          <p class="review-text">${review.text}</p>
+        `;
+        reviewEl.style.animation = 'fadeUp 0.6s ease-out';
+        reviewsContainer.appendChild(reviewEl);
+      });
+
+      // Update favorite button
+      updateFavoriteButton();
+    }
+
+    function setMinDate() {
+      const today = formatDateForInput(new Date());
+      document.getElementById('booking-date').value = today;
+      document.getElementById('booking-date').min = today;
+    }
+
+    function updateTotal() {
+      const price = parseFloat(document.getElementById('booking-price').textContent.replace(/[^\d]/g, ''));
+      const persons = parseInt(document.getElementById('booking-persons').value) || 1;
+
+      const total = price * persons;
+
+      document.getElementById('persons-display').textContent = persons;
+      document.getElementById('total-price').textContent = `$${total.toLocaleString('es-CO')}`;
+    }
+
+    function updateFavoriteButton() {
+      const btn = document.getElementById('favorite-btn');
+      const isFav = Favorites.isFavorite(currentExperience.id);
+      btn.textContent = isFav ? '♥ Guardado' : '♡ Guardar';
+      btn.style.color = isFav ? 'var(--color-error)' : 'inherit';
+    }
+
+    async function toggleFavoriteExp() {
+      await Favorites.toggle(currentExperience.id);
+      updateFavoriteButton();
+    }
+
+    async function submitBooking(e) {
+      e.preventDefault();
+
+      if (!Auth.isLoggedIn()) {
+        window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+        return;
+      }
+
+      const date = document.getElementById('booking-date').value;
+      const time = document.getElementById('booking-time').value;
+      const persons = parseInt(document.getElementById('booking-persons').value);
+      const price = parseFloat(document.getElementById('booking-price').textContent.replace(/[^\d]/g, ''));
+      const total = price * persons;
+
+      const bookingData = {
+        experience_id: currentExperience.id,
+        fecha_inicio: `${date}T${time}:00`,
+        cantidad_personas: persons,
+        monto_total: total,
+        estado: 'confirmada',
+      };
+
+      Modal.show(
+        'Confirmar Reserva',
+        `
+          <p>Por favor, confirma los detalles de tu reserva:</p>
+          <ul style="margin: var(--space-6) 0; text-align: left;">
+            <li><strong>Experiencia:</strong> ${currentExperience.titulo}</li>
+            <li><strong>Fecha:</strong> ${new Date(date).toLocaleDateString('es-CO')}</li>
+            <li><strong>Hora:</strong> ${time}</li>
+            <li><strong>Personas:</strong> ${persons}</li>
+            <li><strong>Total:</strong> $${total.toLocaleString('es-CO')}</li>
+          </ul>
+          <p>Se te redireccionará a pagos para completar la transacción.</p>
+        `,
+        [
+          {
+            text: 'Cancelar',
+            class: 'btn btn-secondary',
+            onClick: () => Modal.close(),
+          },
+          {
+            text: 'Confirmar y Pagar',
+            class: 'btn btn-primary',
+            onClick: async () => {
+              const booking = await Bookings.create(bookingData);
+              if (booking) {
+                Toast.show('Reserva creada. Redirigiendo a pagos...', 'success');
+                setTimeout(() => {
+                  window.location.href = 'perfil.html';
+                }, 2000);
+              }
+            },
+          },
+        ]
+      );
+    }
+  </script>
+</body>
+</html>

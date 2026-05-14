@@ -1,0 +1,430 @@
+// ============================================================
+// EcoXperiencia - Prisma Schema
+// Base de datos para plataforma de ecoturismo
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env ("DATABASE_URL")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum UserRole {
+  VIAJERO
+  ANFITRION
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVO
+  SUSPENDIDO
+  ELIMINADO
+}
+
+enum DocumentType {
+  CC
+  CE
+  PASAPORTE
+}
+
+enum VerificationStatus {
+  PENDIENTE
+  VERIFICADO
+  RECHAZADO
+}
+
+enum ExperienceStatus {
+  BORRADOR
+  PENDIENTE
+  ACTIVA
+  PAUSADA
+  RECHAZADA
+}
+
+enum CancellationPolicy {
+  FLEXIBLE
+  MODERADA
+  ESTRICTA
+}
+
+enum BookingStatus {
+  PENDIENTE
+  CONFIRMADA
+  CANCELADA
+  COMPLETADA
+  NO_SHOW
+}
+
+enum PaymentMethod {
+  TARJETA
+  PAYPAL
+  TRANSFERENCIA
+}
+
+enum PaymentStatus {
+  PENDIENTE
+  APROBADO
+  RECHAZADO
+  REEMBOLSADO
+}
+
+enum NotificationType {
+  RESERVA
+  MENSAJE
+  SISTEMA
+  PROMOCION
+  RECORDATORIO
+}
+
+// ============================================================
+// MODELOS PRINCIPALES
+// ============================================================
+
+// ============================================================
+// USUARIO (Users)
+// ============================================================
+model User {
+  id               String    @id @default(uuid())
+  email            String    @unique
+  passwordHash     String
+  nombreCompleto   String
+  telefono         String?
+  bio              String?
+  avatarUrl        String?
+  rol              UserRole  @default(VIAJERO)
+  emailVerificado  Boolean   @default(false)
+  fechaCreacion    DateTime  @default(now())
+  ultimaSesion     DateTime?
+  estado           UserStatus @default(ACTIVO)
+  
+  // Relaciones
+  host             Host?
+  favoritos        Favorite[]
+  reservas         Booking[]
+  reseñas          Review[]
+  pagos            Payment[]
+  notificaciones   Notification[]
+  conversacionesIniciadas Conversation[] @relation("conversacion_usuario")
+  conversacionesRecibidas Conversation[] @relation("conversacion_anfitrion")
+  mensajes         Message[]
+  
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([email])
+  @@index([rol])
+}
+
+// ============================================================
+// ANFITRIÓN (Hosts)
+// ============================================================
+model Host {
+  id                   String    @id @default(uuid())
+  usuarioId            String    @unique
+  usuario              User      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  
+  documentoTipo        DocumentType
+  documentoNumero      String    @unique
+  fechaNacimiento      DateTime
+  direccionCompleta    String
+  ciudad               String
+  departamento         String
+  pais                 String    @default("Colombia")
+  biografiaAnfitrion   String?
+  certificaciones      Json?     // Array of certifications
+  fechaVerificacion    DateTime?
+  estadoVerificacion   VerificationStatus @default(PENDIENTE)
+  
+  // Relaciones
+  experiencias         Experience[]
+  
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@index([usuarioId])
+  @@index([documentoNumero])
+}
+
+// ============================================================
+// CATEGORÍA (Categories)
+// ============================================================
+model Category {
+  id          String    @id @default(uuid())
+  nombre      String    @unique
+  slug        String    @unique
+  descripcion String?
+  icono       String
+  orden       Int       @default(0)
+  activa      Boolean   @default(true)
+  
+  // Relaciones
+  experiencias Experience[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+}
+
+// ============================================================
+// EXPERIENCIA (Experiences)
+// ============================================================
+model Experience {
+  id                   String    @id @default(uuid())
+  anfitrionId          String
+  anfitrion            Host      @relation(fields: [anfitrionId], references: [id], onDelete: Cascade)
+  
+  titulo               String
+  slug                 String    @unique
+  descripcion          String
+  categoriaId          String?
+  categoria            Category? @relation(fields: [categoriaId], references: [id])
+  subcategoria         String?
+  ubicacionTexto       String
+  latitud              Decimal?  @db.Decimal(10, 8)
+  longitud             Decimal?  @db.Decimal(11, 8)
+  
+  precioBase           Decimal   @db.Decimal(12, 2)
+  moneda               String    @default("COP")
+  duracionHoras        Int
+  maxPersonas          Int
+  minPersonas          Int       @default(1)
+  
+  incluye              Json?     // Array of items
+  noIncluye            Json?     // Array of items
+  requisitos           Json?     // Array of requirements
+  puntoEncuentro       String?
+  
+  politicaCancelacion  CancellationPolicy @default(FLEXIBLE)
+  estado               ExperienceStatus   @default(BORRADOR)
+  fechaActivacion      DateTime?
+  
+  // Relaciones
+  imagenes             ExperienceImage[]
+  favoritos            Favorite[]
+  reservas             Booking[]
+  reseñas              Review[]
+  conversaciones       Conversation[]
+  
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@index([anfitrionId])
+  @@index([categoriaId])
+  @@index([slug])
+  @@index([estado])
+}
+
+// ============================================================
+// IMAGEN DE EXPERIENCIA (Experience Images)
+// ============================================================
+model ExperienceImage {
+  id              String    @id @default(uuid())
+  experienciaId   String
+  experiencia     Experience @relation(fields: [experienciaId], references: [id], onDelete: Cascade)
+  
+  url             String
+  titulo          String?
+  orden           Int       @default(0)
+  esPortada       Boolean   @default(false)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([experienciaId])
+}
+
+// ============================================================
+// FAVORITO (Favorites)
+// ============================================================
+model Favorite {
+  id              String    @id @default(uuid())
+  usuarioId       String
+  usuario         User      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  experienciaId   String
+  experiencia     Experience @relation(fields: [experienciaId], references: [id], onDelete: Cascade)
+  
+  fechaAgregado   DateTime  @default(now())
+
+  @@unique([usuarioId, experienciaId])
+  @@index([usuarioId])
+  @@index([experienciaId])
+}
+
+// ============================================================
+// RESERVA (Bookings)
+// ============================================================
+model Booking {
+  id                  String    @id @default(uuid())
+  experienciaId       String
+  experiencia         Experience @relation(fields: [experienciaId], references: [id])
+  
+  usuarioId           String
+  usuario             User      @relation(fields: [usuarioId], references: [id])
+  
+  fechaExperiencia    DateTime
+  horario             String    // TIME format as string
+  personas            Int
+  
+  precioUnitario      Decimal   @db.Decimal(12, 2)
+  precioTotal         Decimal   @db.Decimal(12, 2)
+  
+  estado              BookingStatus @default(PENDIENTE)
+  codigoConfirmacion  String?   @unique
+  notasUsuario        String?
+  notasAnfitrion      String?
+  
+  fechaReserva        DateTime  @default(now())
+  fechaCancelacion    DateTime?
+  
+  // Relaciones
+  pago                Payment?
+  reseña              Review?
+  
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([experienciaId])
+  @@index([usuarioId])
+  @@index([estado])
+}
+
+// ============================================================
+// PAGO (Payments)
+// ============================================================
+model Payment {
+  id                String    @id @default(uuid())
+  bookingId         String    @unique
+  booking           Booking   @relation(fields: [bookingId], references: [id])
+  
+  usuarioId         String
+  usuario           User      @relation(fields: [usuarioId], references: [id])
+  
+  monto             Decimal   @db.Decimal(12, 2)
+  moneda            String    @default("COP")
+  metodo            PaymentMethod
+  estado            PaymentStatus @default(PENDIENTE)
+  
+  transactionId     String?   @unique
+  gatewayResponse   Json?     // Full response from payment gateway
+  
+  fechaPago         DateTime  @default(now())
+  fechaReembolso    DateTime?
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([bookingId])
+  @@index([usuarioId])
+  @@index([estado])
+}
+
+// ============================================================
+// RESEÑA (Reviews)
+// ============================================================
+model Review {
+  id                      String    @id @default(uuid())
+  experienciaId           String
+  experiencia             Experience @relation(fields: [experienciaId], references: [id])
+  
+  usuarioId               String
+  usuario                 User      @relation(fields: [usuarioId], references: [id])
+  
+  bookingId               String    @unique
+  booking                 Booking   @relation(fields: [bookingId], references: [id])
+  
+  calificacion            Int       // 1-5
+  titulo                  String?
+  comentario              String
+  
+  calificacionLimpieza    Int?      // 1-5
+  calificacionValor       Int?      // 1-5
+  calificacionExperiencia Int?      // 1-5
+  
+  respuestaAnfitrion      String?
+  fechaRespuesta          DateTime?
+  
+  visible                 Boolean   @default(true)
+  
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@index([experienciaId])
+  @@index([usuarioId])
+}
+
+// ============================================================
+// NOTIFICACIÓN (Notifications)
+// ============================================================
+model Notification {
+  id            String    @id @default(uuid())
+  usuarioId     String
+  usuario       User      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  
+  tipo          NotificationType
+  titulo        String
+  mensaje       String
+  leido         Boolean   @default(false)
+  urlAccion     String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([usuarioId])
+  @@index([leido])
+}
+
+// ============================================================
+// CONVERSACIÓN (Conversations)
+// ============================================================
+model Conversation {
+  id                   String    @id @default(uuid())
+  usuarioId            String
+  usuario              User      @relation("conversacion_usuario", fields: [usuarioId], references: [id], onDelete: Cascade)
+  
+  anfitrionId          String
+  anfitrion            User      @relation("conversacion_anfitrion", fields: [anfitrionId], references: [id], onDelete: Cascade)
+  
+  experienciaId        String?
+  experiencia          Experience? @relation(fields: [experienciaId], references: [id])
+  
+  ultimaActualizacion  DateTime  @default(now())
+  
+  // Relaciones
+  mensajes             Message[]
+  
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@unique([usuarioId, anfitrionId, experienciaId])
+  @@index([usuarioId])
+  @@index([anfitrionId])
+}
+
+// ============================================================
+// MENSAJE (Messages)
+// ============================================================
+model Message {
+  id              String    @id @default(uuid())
+  conversacionId  String
+  conversacion    Conversation @relation(fields: [conversacionId], references: [id], onDelete: Cascade)
+  
+  emisorId        String
+  emisor          User      @relation(fields: [emisorId], references: [id])
+  
+  mensaje         String
+  leido           Boolean   @default(false)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([conversacionId])
+  @@index([emisorId])
+}
