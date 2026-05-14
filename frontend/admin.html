@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - EcoXperiencia</title>
+    <meta name="description" content="Panel de administración de EcoXperiencia.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="page-content">
+        <section style="background: var(--color-off-white); padding: var(--space-8) 0 var(--space-20);">
+            <div class="container">
+
+                <!-- Header -->
+                <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); border-radius: var(--radius-lg); padding: var(--space-8); color: white; margin-bottom: var(--space-8);">
+                    <div style="display: flex; align-items: center; gap: var(--space-4);">
+                        <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--color-earth); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; color: white; flex-shrink: 0;" id="adminAvatar">AD</div>
+                        <div>
+                            <h1 style="font-family: var(--font-display); font-size: var(--text-2xl); margin-bottom: var(--space-1);">Panel de Administración</h1>
+                            <p style="opacity: 0.7; font-size: var(--text-sm);">Bienvenido, <span id="adminName">Administrador</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="admin-stats-grid">
+                    <div class="admin-stat-card">
+                        <span class="admin-stat-number" style="color: var(--color-moss);" id="statUsers">0</span>
+                        <span class="admin-stat-label">Usuarios registrados</span>
+                    </div>
+                    <div class="admin-stat-card">
+                        <span class="admin-stat-number" style="color: var(--color-earth);" id="statHosts">0</span>
+                        <span class="admin-stat-label">Anfitriones</span>
+                    </div>
+                    <div class="admin-stat-card">
+                        <span class="admin-stat-number" style="color: var(--color-gold);" id="statPending">0</span>
+                        <span class="admin-stat-label">Solicitudes pendientes</span>
+                    </div>
+                    <div class="admin-stat-card">
+                        <span class="admin-stat-number" style="color: var(--color-lime-dark);" id="statBookings">0</span>
+                        <span class="admin-stat-label">Reservas totales</span>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="profile-tabs" id="adminTabs">
+                    <button class="profile-tab active" data-tab="pending">
+                        Solicitudes pendientes
+                        <span class="tab-count notif-tab-count" id="pendingCount"></span>
+                    </button>
+                    <button class="profile-tab" data-tab="hosts">Anfitriones</button>
+                    <button class="profile-tab" data-tab="users">Usuarios</button>
+                    <button class="profile-tab" data-tab="bookings">Reservas</button>
+                </div>
+
+                <!-- Tab: Solicitudes pendientes -->
+                <div class="tab-panel active" id="tab-pending">
+                    <div id="pendingList"></div>
+                </div>
+
+                <!-- Tab: Anfitriones -->
+                <div class="tab-panel" id="tab-hosts">
+                    <div id="hostsList"></div>
+                </div>
+
+                <!-- Tab: Usuarios -->
+                <div class="tab-panel" id="tab-users">
+                    <div id="usersList"></div>
+                </div>
+
+                <!-- Tab: Reservas -->
+                <div class="tab-panel" id="tab-bookings">
+                    <div id="bookingsList"></div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const { Auth, Admin, Notifications, Toast, Modal, formatPrice } = EcoXperiencia;
+
+            if (!Auth.isLoggedIn()) {
+                window.location.href = 'login.html?redirect=admin.html';
+                return;
+            }
+            if (Auth.getCurrentUser().role !== 'admin') {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const user = Auth.getCurrentUser();
+            document.getElementById('adminAvatar').textContent = user.avatar;
+            document.getElementById('adminName').textContent = user.name;
+
+            function refreshStats() {
+                const users = Admin.getAllUsers();
+                const hosts = Admin.getAllHosts();
+                const pending = Admin.getPendingHosts();
+                const bookings = Admin.getAllBookings();
+
+                document.getElementById('statUsers').textContent = users.length;
+                document.getElementById('statHosts').textContent = hosts.filter(h => h.verificationStatus === 'verificado').length;
+                document.getElementById('statPending').textContent = pending.length;
+                document.getElementById('statBookings').textContent = bookings.length;
+
+                const pendingCountEl = document.getElementById('pendingCount');
+                pendingCountEl.textContent = pending.length > 0 ? pending.length : '';
+            }
+
+            // Tabs
+            const tabs = document.querySelectorAll('.profile-tab');
+            const panels = document.querySelectorAll('.tab-panel');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panels.forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+                    if (tab.dataset.tab === 'pending') loadPending();
+                    if (tab.dataset.tab === 'hosts') loadHosts();
+                    if (tab.dataset.tab === 'users') loadUsers();
+                    if (tab.dataset.tab === 'bookings') loadAdminBookings();
+                });
+            });
+
+            function statusBadge(status) {
+                const map = {
+                    verificado: '<span class="role-badge role-anfitrion">Verificado ✓</span>',
+                    pendiente: '<span class="role-badge role-viajero">En revisión</span>',
+                    rechazado: '<span class="role-badge" style="background:#fef2f2;color:#dc2626;">Rechazado</span>'
+                };
+                return map[status] || map.pendiente;
+            }
+
+            function roleBadge(role) {
+                const map = {
+                    admin: '<span class="role-badge role-admin">Admin</span>',
+                    anfitrion: '<span class="role-badge role-anfitrion">Anfitrión</span>',
+                    viajero: '<span class="role-badge role-viajero">Viajero</span>'
+                };
+                return map[role] || map.viajero;
+            }
+
+            function loadPending() {
+                const pending = Admin.getPendingHosts();
+                const container = document.getElementById('pendingList');
+
+                if (pending.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            <h2>Sin solicitudes pendientes</h2>
+                            <p>Todas las solicitudes han sido revisadas.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = pending.map(host => `
+                    <div class="admin-host-card" data-host-id="${host.id}">
+                        <div class="admin-host-card-header">
+                            <div>
+                                <h3 style="font-family: var(--font-display); color: var(--color-moss); margin-bottom: var(--space-1);">${host.userName}</h3>
+                                <p style="font-size: var(--text-sm); color: var(--color-gray-500);">${host.userEmail} · ${host.city}, ${host.department}</p>
+                            </div>
+                            <div class="admin-host-actions">
+                                <button class="btn-approve" data-host-id="${host.id}">✓ Aprobar</button>
+                                <button class="btn-reject" data-host-id="${host.id}">✗ Rechazar</button>
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: var(--space-4); margin-bottom: var(--space-3);">
+                            <div>
+                                <p style="font-size:var(--text-xs); font-weight:600; color:var(--color-gray-400); text-transform:uppercase; margin-bottom:2px;">Documento</p>
+                                <p style="font-size:var(--text-sm);">${host.documentType} · ${host.documentNumber}</p>
+                            </div>
+                            <div>
+                                <p style="font-size:var(--text-xs); font-weight:600; color:var(--color-gray-400); text-transform:uppercase; margin-bottom:2px;">Dirección</p>
+                                <p style="font-size:var(--text-sm);">${host.address}</p>
+                            </div>
+                            <div>
+                                <p style="font-size:var(--text-xs); font-weight:600; color:var(--color-gray-400); text-transform:uppercase; margin-bottom:2px;">Solicitud</p>
+                                <p style="font-size:var(--text-sm);">${new Date(host.createdAt).toLocaleDateString('es-CO', { year:'numeric', month:'short', day:'numeric' })}</p>
+                            </div>
+                        </div>
+                        ${host.hostBio ? `<p style="font-size:var(--text-sm); color:var(--color-gray-600); background:var(--color-cream); padding:var(--space-3); border-radius:var(--radius-md);">"${host.hostBio}"</p>` : ''}
+                        ${host.certifications && host.certifications.length > 0 ? `
+                            <div style="margin-top:var(--space-3); display:flex; flex-wrap:wrap; gap:var(--space-2);">
+                                ${host.certifications.map(c => `<span style="background:var(--color-moss); color:white; padding:2px 10px; border-radius:999px; font-size:var(--text-xs);">${c}</span>`).join('')}
+                            </div>` : ''}
+                    </div>
+                `).join('');
+
+                // Approve buttons
+                container.querySelectorAll('.btn-approve').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        Modal.confirm('Aprobar solicitud', `¿Aprobar a este anfitrión? Se le notificará y podrá publicar experiencias.`, () => {
+                            const result = Admin.approveHost(btn.dataset.hostId);
+                            if (result.success) {
+                                Toast.show('Anfitrión aprobado exitosamente');
+                                refreshStats();
+                                loadPending();
+                            } else {
+                                Toast.show(result.message, 'error');
+                            }
+                        });
+                    });
+                });
+
+                // Reject buttons
+                container.querySelectorAll('.btn-reject').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        Modal.confirm('Rechazar solicitud', '¿Rechazar esta solicitud de anfitrión? Se notificará al usuario.', () => {
+                            const result = Admin.rejectHost(btn.dataset.hostId);
+                            if (result.success) {
+                                Toast.show('Solicitud rechazada');
+                                refreshStats();
+                                loadPending();
+                            } else {
+                                Toast.show(result.message, 'error');
+                            }
+                        });
+                    });
+                });
+            }
+
+            function loadHosts() {
+                const hosts = Admin.getAllHosts();
+                const container = document.getElementById('hostsList');
+                if (hosts.length === 0) {
+                    container.innerHTML = `<div class="empty-state"><h2>Sin anfitriones registrados</h2></div>`;
+                    return;
+                }
+                container.innerHTML = `
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Ciudad</th>
+                                    <th>Estado</th>
+                                    <th>Fecha solicitud</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${hosts.map(h => `
+                                    <tr>
+                                        <td><strong>${h.userName}</strong></td>
+                                        <td>${h.userEmail}</td>
+                                        <td>${h.city}, ${h.department}</td>
+                                        <td>${statusBadge(h.verificationStatus)}</td>
+                                        <td>${new Date(h.createdAt).toLocaleDateString('es-CO', { year:'numeric', month:'short', day:'numeric' })}</td>
+                                    </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>`;
+            }
+
+            function loadUsers() {
+                const users = Admin.getAllUsers();
+                const container = document.getElementById('usersList');
+                container.innerHTML = `
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Registro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${users.map(u => `
+                                    <tr>
+                                        <td>
+                                            <div style="display:flex; align-items:center; gap:var(--space-2);">
+                                                <div style="width:32px; height:32px; border-radius:50%; background:var(--color-moss); color:white; display:flex; align-items:center; justify-content:center; font-size:var(--text-xs); font-weight:700; flex-shrink:0;">${u.avatar}</div>
+                                                <strong>${u.name}</strong>
+                                            </div>
+                                        </td>
+                                        <td>${u.email}</td>
+                                        <td>${roleBadge(u.role)}</td>
+                                        <td><span style="color: ${u.status === 'activo' ? '#16a34a' : '#dc2626'}; font-weight:600; font-size:var(--text-sm);">${u.status === 'activo' ? '● Activo' : '● Inactivo'}</span></td>
+                                        <td>${new Date(u.createdAt).toLocaleDateString('es-CO', { year:'numeric', month:'short', day:'numeric' })}</td>
+                                    </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>`;
+            }
+
+            function loadAdminBookings() {
+                const bookings = Admin.getAllBookings();
+                const container = document.getElementById('bookingsList');
+                if (bookings.length === 0) {
+                    container.innerHTML = `<div class="empty-state"><h2>Sin reservas registradas</h2></div>`;
+                    return;
+                }
+
+                const statusMap = {
+                    confirmada: { label: 'Confirmada', color: '#16a34a' },
+                    cancelada: { label: 'Cancelada', color: '#dc2626' },
+                    completada: { label: 'Completada', color: 'var(--color-moss)' },
+                    pendiente: { label: 'Pendiente', color: 'var(--color-gold)' }
+                };
+
+                container.innerHTML = `
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Experiencia</th>
+                                    <th>Viajero</th>
+                                    <th>Fecha</th>
+                                    <th>Personas</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${bookings.map(b => {
+                                    const s = statusMap[b.status] || statusMap.pendiente;
+                                    return `
+                                    <tr>
+                                        <td><code style="font-size:var(--text-xs); background:var(--color-cream); padding:2px 6px; border-radius:4px;">${b.confirmationCode}</code></td>
+                                        <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${b.experienceTitle}</td>
+                                        <td>${b.userName}</td>
+                                        <td>${new Date(b.date + 'T12:00:00').toLocaleDateString('es-CO', { day:'numeric', month:'short', year:'numeric' })}</td>
+                                        <td style="text-align:center;">${b.guests}</td>
+                                        <td><strong>${formatPrice(b.totalPrice)}</strong></td>
+                                        <td><span style="color:${s.color}; font-weight:600; font-size:var(--text-xs);">● ${s.label}</span></td>
+                                    </tr>`;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="font-size:var(--text-sm); color:var(--color-gray-500); margin-top:var(--space-4); text-align:right;">
+                        Total ingresos confirmados: <strong style="color:var(--color-moss);">${formatPrice(bookings.filter(b=>b.status==='confirmada').reduce((s,b)=>s+b.totalPrice,0))}</strong>
+                    </p>`;
+            }
+
+            // Initial load
+            refreshStats();
+            loadPending();
+        });
+    </script>
+</body>
+</html>

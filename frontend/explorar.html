@@ -1,223 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Explorar Experiencias - EcoXperiencia</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorar - EcoXperiencia</title>
+    <meta name="description" content="Explora experiencias ecoturísticas en Colombia. Encuentra tu próxima aventura.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <!-- Navbar will be injected here -->
-  <nav id="navbar-container"></nav>
+    <div id="navbar-container"></div>
 
-  <!-- Page Header -->
-  <section class="detail-header">
-    <div class="container">
-      <h1 class="detail-title">Explorar Experiencias</h1>
-      <div class="detail-meta">
-        <span>🌿 Turismo sostenible</span>
-        <span>📍 En toda Colombia</span>
-        <span>⭐ Experiencias verificadas</span>
-      </div>
+    <div class="page-content">
+        <section class="filters">
+            <div class="container">
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <label for="filter-category">Categoría</label>
+                        <select id="filter-category">
+                            <option value="">Todas las categorías</option>
+                            <option value="hiking">Senderismo</option>
+                            <option value="wildlife">Avistamiento</option>
+                            <option value="camping">Camping</option>
+                            <option value="rivers">Ríos y cascadas</option>
+                            <option value="agrotourism">Agroturismo</option>
+                            <option value="highmountain">Alta montaña</option>
+                            <option value="diving">Buceo</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filter-price">Precio máximo</label>
+                        <select id="filter-price">
+                            <option value="">Cualquier precio</option>
+                            <option value="100000">Hasta $100.000</option>
+                            <option value="200000">Hasta $200.000</option>
+                            <option value="300000">Hasta $300.000</option>
+                            <option value="500000">Hasta $500.000</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filter-location">Ubicación</label>
+                        <input type="text" id="filter-location" placeholder="Ej: Boyacá, Amazonas...">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filter-search">Buscar</label>
+                        <input type="text" id="filter-search" placeholder="Nombre de la experiencia">
+                    </div>
+
+                    <button class="btn-clear" id="btn-clear">Limpiar</button>
+                    <button class="btn-filter" id="btn-filter">Filtrar</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="experiences">
+            <div class="container">
+                <h1 class="section-title fade-up">Explora experiencias</h1>
+                <p class="section-subtitle fade-up" id="results-count"></p>
+
+                <div class="experiences-grid" id="experiencesGrid">
+                    <!-- Cards will be loaded by JavaScript -->
+                </div>
+            </div>
+        </section>
     </div>
-  </section>
 
-  <!-- Main Content -->
-  <section class="section">
-    <div class="container">
-      <div style="display: grid; grid-template-columns: 280px 1fr; gap: var(--space-8);">
-        
-        <!-- Filters Sidebar -->
-        <aside>
-          <div class="filters-container">
-            <h3 class="filters-title">🔍 Filtros</h3>
-            
-            <div class="filter-group">
-              <label>Búsqueda general</label>
-              <input 
-                type="text" 
-                id="filter-search" 
-                placeholder="Buscar experiencia..."
-                onkeyup="applyFilters()"
-              >
-            </div>
+    <div id="footer-container"></div>
 
-            <div class="filter-group">
-              <label>Categoría</label>
-              <select id="filter-category" onchange="applyFilters()">
-                <option value="">Todas las categorías</option>
-              </select>
-            </div>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const grid = document.getElementById('experiencesGrid');
+            const resultsCount = document.getElementById('results-count');
+            const categoryFilter = document.getElementById('filter-category');
+            const priceFilter = document.getElementById('filter-price');
+            const locationFilter = document.getElementById('filter-location');
+            const searchFilter = document.getElementById('filter-search');
+            const btnFilter = document.getElementById('btn-filter');
+            const btnClear = document.getElementById('btn-clear');
 
-            <div class="filter-group">
-              <label>Precio máximo</label>
-              <input 
-                type="number" 
-                id="filter-price" 
-                placeholder="Máximo en COP"
-                onkeyup="applyFilters()"
-              >
-            </div>
+            // Get URL params
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+            const qParam = urlParams.get('q');
+            const dateParam = urlParams.get('date');
+            const guestsParam = urlParams.get('guests');
 
-            <div class="filter-group">
-              <label>Ubicación</label>
-              <input 
-                type="text" 
-                id="filter-location" 
-                placeholder="Departamento..."
-                onkeyup="applyFilters()"
-              >
-            </div>
+            // Set initial filter values from URL
+            if (categoryParam) {
+                categoryFilter.value = categoryParam;
+            }
+            if (qParam) {
+                searchFilter.value = qParam;
+            }
 
-            <button class="filter-btn" onclick="applyFilters()">Aplicar filtros</button>
-            <button class="clear-filters" onclick="clearFilters()">Limpiar filtros</button>
-          </div>
-        </aside>
+            // Apply filters
+            function applyFilters() {
+                const category = categoryFilter.value;
+                const maxPrice = priceFilter.value ? parseInt(priceFilter.value) : null;
+                const location = locationFilter.value.toLowerCase();
+                const search = searchFilter.value.toLowerCase();
 
-        <!-- Results -->
-        <main>
-          <div class="results-info">
-            <span class="results-count">
-              Mostrando <strong id="result-count">0</strong> resultados
-            </span>
-            <select class="sort-select" id="sort-select" onchange="applyFilters()">
-              <option value="featured">Destacados</option>
-              <option value="price-low">Precio: menor a mayor</option>
-              <option value="price-high">Precio: mayor a menor</option>
-              <option value="rating">Mejor calificados</option>
-            </select>
-          </div>
+                let filtered = EcoXperiencia.getAllExperiences().filter(exp => {
+                    if (category && exp.categoryId !== category) return false;
+                    if (maxPrice && exp.price > maxPrice) return false;
+                    if (location && !exp.location.toLowerCase().includes(location)) return false;
+                    if (search && !exp.title.toLowerCase().includes(search) && !exp.description.toLowerCase().includes(search)) return false;
+                    return true;
+                });
 
-          <div class="grid grid-cols-3" id="results-container">
-            <!-- Results will be loaded here -->
-          </div>
-        </main>
+                renderExperiences(filtered);
+            }
 
-      </div>
-    </div>
-  </section>
+            function renderExperiences(experiences) {
+                if (experiences.length === 0) {
+                    grid.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="M21 21l-4.35-4.35"/>
+                            </svg>
+                            <h2>No se encontraron experiencias</h2>
+                            <p>Intenta ajustar los filtros o busca con otros términos.</p>
+                        </div>
+                    `;
+                    resultsCount.textContent = '0 experiencias encontradas';
+                    return;
+                }
 
-  <!-- Footer will be injected here -->
-  <footer id="footer-container"></footer>
+                grid.innerHTML = experiences.map(exp => EcoXperiencia.Components.experienceCard(exp)).join('');
+                resultsCount.textContent = `${experiences.length} experiencia${experiences.length !== 1 ? 's' : ''} encontrada${experiences.length !== 1 ? 's' : ''}`;
+            }
 
-  <script src="js/app.js"></script>
-  <script>
-    let allExperiences = [];
-    const params = getURLParams();
+            // Event listeners
+            btnFilter.addEventListener('click', applyFilters);
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      // Load categories for filter
-      const categories = await Categories.getAll();
-      const categorySelect = document.getElementById('filter-category');
-      
-      categories.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat.slug;
-        option.textContent = cat.nombre;
-        categorySelect.appendChild(option);
-      });
+            btnClear.addEventListener('click', () => {
+                categoryFilter.value = '';
+                priceFilter.value = '';
+                locationFilter.value = '';
+                searchFilter.value = '';
+                renderExperiences(EcoXperiencia.getAllExperiences());
+            });
 
-      // Set filters from URL params
-      if (params.location) {
-        document.getElementById('filter-location').value = params.location;
-      }
-      if (params.category) {
-        document.getElementById('filter-category').value = params.category;
-      }
-      if (params.q) {
-        document.getElementById('filter-search').value = params.q;
-      }
-
-      // Load all experiences
-      await loadExperiences();
-    });
-
-    async function loadExperiences() {
-      document.getElementById('results-container').innerHTML = Components.loadingSpinner();
-      
-      try {
-        allExperiences = await Experiences.getAll();
-        applyFilters();
-      } catch (error) {
-        console.error('Error loading experiences:', error);
-        document.getElementById('results-container').innerHTML = Components.emptyState(
-          '❌',
-          'Error al cargar',
-          'No pudimos cargar las experiencias. Por favor, intenta más tarde.'
-        );
-      }
-    }
-
-    function applyFilters() {
-      const searchTerm = document.getElementById('filter-search').value.toLowerCase();
-      const category = document.getElementById('filter-category').value;
-      const maxPrice = parseFloat(document.getElementById('filter-price').value) || Infinity;
-      const location = document.getElementById('filter-location').value.toLowerCase();
-      const sort = document.getElementById('sort-select').value;
-
-      let filtered = allExperiences.filter(exp => {
-        const title = (exp.titulo || exp.title || '').toLowerCase();
-        const desc = (exp.descripcion || exp.description || '').toLowerCase();
-        const expLocation = (exp.ubicacion_texto || exp.location || '').toLowerCase();
-        const expCategory = exp.categoria?.slug || exp.categoryId || '';
-        const price = exp.precio_base || exp.price || 0;
-
-        const matchesSearch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm);
-        const matchesCategory = !category || expCategory === category;
-        const matchesPrice = price <= maxPrice;
-        const matchesLocation = !location || expLocation.includes(location);
-
-        return matchesSearch && matchesCategory && matchesPrice && matchesLocation;
-      });
-
-      // Sort results
-      switch (sort) {
-        case 'price-low':
-          filtered.sort((a, b) => (a.precio_base || a.price || 0) - (b.precio_base || b.price || 0));
-          break;
-        case 'price-high':
-          filtered.sort((a, b) => (b.precio_base || b.price || 0) - (a.precio_base || a.price || 0));
-          break;
-        case 'rating':
-          filtered.sort((a, b) => (b.rating || 4.8) - (a.rating || 4.8));
-          break;
-      }
-
-      // Render results
-      const container = document.getElementById('results-container');
-      const countEl = document.getElementById('result-count');
-
-      if (filtered.length === 0) {
-        container.innerHTML = Components.emptyState(
-          '🔍',
-          'No se encontraron experiencias',
-          'Intenta cambiar tus filtros de búsqueda'
-        );
-        countEl.textContent = '0';
-      } else {
-        container.innerHTML = '';
-        filtered.forEach((exp, index) => {
-          const card = document.createElement('div');
-          card.innerHTML = Components.experienceCard(exp);
-          card.style.animation = 'fadeUp 0.6s ease-out';
-          card.style.animationDelay = `${index * 0.05}s`;
-          container.appendChild(card);
+            // Initial render
+            applyFilters();
         });
-        countEl.textContent = filtered.length;
-      }
-    }
-
-    function clearFilters() {
-      document.getElementById('filter-search').value = '';
-      document.getElementById('filter-category').value = '';
-      document.getElementById('filter-price').value = '';
-      document.getElementById('filter-location').value = '';
-      document.getElementById('sort-select').value = 'featured';
-      applyFilters();
-    }
-  </script>
+    </script>
 </body>
 </html>

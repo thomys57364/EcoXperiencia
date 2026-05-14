@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Anfitrión - EcoXperiencia</title>
+    <meta name="description" content="Gestiona tus experiencias y reservas como anfitrión en EcoXperiencia.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="page-content">
+        <section style="background: var(--color-off-white); padding: var(--space-8) 0 var(--space-20);">
+            <div class="container">
+
+                <!-- Header -->
+                <div style="background: linear-gradient(135deg, var(--color-moss), var(--color-moss-light)); border-radius: var(--radius-lg); padding: var(--space-8); color: white; margin-bottom: var(--space-8);">
+                    <div style="display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background-color: var(--color-lime); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; color: var(--color-moss); flex-shrink: 0;" id="dashAvatar"></div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-2);">
+                                <h1 style="font-family: var(--font-display); font-size: var(--text-2xl);" id="dashName">Cargando...</h1>
+                                <span id="verificationBadge" class="role-badge"></span>
+                            </div>
+                            <p style="opacity: 0.8;" id="dashBio"></p>
+                        </div>
+                        <a href="perfil.html" class="btn-secondary" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: white;">Editar perfil</a>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-8);" class="dash-stats">
+                    <div style="background: white; border-radius: var(--radius-lg); padding: var(--space-6); box-shadow: var(--shadow-sm); text-align: center;">
+                        <div style="font-family: var(--font-display); font-size: var(--text-4xl); font-weight: 700; color: var(--color-moss);" id="statExperiences">0</div>
+                        <p style="color: var(--color-gray-500); font-size: var(--text-sm);">Experiencias</p>
+                    </div>
+                    <div style="background: white; border-radius: var(--radius-lg); padding: var(--space-6); box-shadow: var(--shadow-sm); text-align: center;">
+                        <div style="font-family: var(--font-display); font-size: var(--text-4xl); font-weight: 700; color: var(--color-earth);" id="statBookings">0</div>
+                        <p style="color: var(--color-gray-500); font-size: var(--text-sm);">Reservas totales</p>
+                    </div>
+                    <div style="background: white; border-radius: var(--radius-lg); padding: var(--space-6); box-shadow: var(--shadow-sm); text-align: center;">
+                        <div style="font-family: var(--font-display); font-size: var(--text-4xl); font-weight: 700; color: var(--color-lime-dark);" id="statConfirmed">0</div>
+                        <p style="color: var(--color-gray-500); font-size: var(--text-sm);">Confirmadas</p>
+                    </div>
+                    <div style="background: white; border-radius: var(--radius-lg); padding: var(--space-6); box-shadow: var(--shadow-sm); text-align: center;">
+                        <div style="font-family: var(--font-display); font-size: var(--text-4xl); font-weight: 700; color: var(--color-gold);" id="statRevenue">$0</div>
+                        <p style="color: var(--color-gray-500); font-size: var(--text-sm);">Ingresos estimados</p>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="profile-tabs" id="dashTabs">
+                    <button class="profile-tab active" data-tab="experiences">Mis experiencias</button>
+                    <button class="profile-tab" data-tab="bookings">Reservas recibidas</button>
+                    <button class="profile-tab" data-tab="profile">Perfil de anfitrión</button>
+                </div>
+
+                <!-- Tab: Experiencias -->
+                <div class="tab-panel active" id="tab-experiences">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5); flex-wrap: wrap; gap: var(--space-3);">
+                        <h2 style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-moss);">Mis experiencias</h2>
+                        <button class="btn-submit" id="btnNewExperience" style="width: auto; padding: var(--space-3) var(--space-5); font-size: var(--text-sm);">
+                            + Publicar experiencia
+                        </button>
+                    </div>
+                    <div id="experiencesList"></div>
+                </div>
+
+                <!-- Tab: Reservas -->
+                <div class="tab-panel" id="tab-bookings">
+                    <div id="hostBookingsList"></div>
+                </div>
+
+                <!-- Tab: Perfil anfitrión -->
+                <div class="tab-panel" id="tab-profile">
+                    <div style="background: white; border-radius: var(--radius-lg); padding: var(--space-8); box-shadow: var(--shadow-sm);" id="hostProfileInfo">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const { Auth, Host, Bookings, Reviews, experiencesData, formatPrice, icons } = EcoXperiencia;
+
+            // Must be host
+            if (!Auth.isLoggedIn()) {
+                window.location.href = 'login.html?redirect=dashboard-anfitrion.html';
+                return;
+            }
+
+            if (!Auth.hasRole('anfitrion')) {
+                window.location.href = 'anfitrion.html?register=1';
+                return;
+            }
+
+            const user = Auth.getCurrentUser();
+            const hostProfile = Host.getProfile();
+
+            // Populate header
+            document.getElementById('dashAvatar').textContent = user.avatar;
+            document.getElementById('dashName').textContent = user.name;
+            document.getElementById('dashBio').textContent = user.bio || 'Sin biografía configurada.';
+
+            const badge = document.getElementById('verificationBadge');
+            if (hostProfile) {
+                const statusMap = { verificado: { label: 'Verificado ✓', cls: 'role-anfitrion' }, pendiente: { label: 'En revisión', cls: 'role-viajero' }, rechazado: { label: 'Rechazado', cls: '' } };
+                const s = statusMap[hostProfile.verificationStatus] || statusMap.pendiente;
+                badge.textContent = s.label;
+                badge.className = `role-badge ${s.cls}`;
+            } else {
+                badge.textContent = 'Pendiente de verificación';
+                badge.className = 'role-badge role-viajero';
+            }
+
+            // Load stats
+            const myExperiences = Host.getMyExperiences();
+            const allBookings = Bookings.getHostBookings();
+            const confirmedBookings = allBookings.filter(b => b.status === 'confirmada');
+            const revenue = confirmedBookings.reduce((sum, b) => sum + b.totalPrice, 0);
+
+            document.getElementById('statExperiences').textContent = myExperiences.length;
+            document.getElementById('statBookings').textContent = allBookings.length;
+            document.getElementById('statConfirmed').textContent = confirmedBookings.length;
+            document.getElementById('statRevenue').textContent = '$' + revenue.toLocaleString('es-CO');
+
+            // Tabs
+            const tabs = document.querySelectorAll('.profile-tab');
+            const panels = document.querySelectorAll('.tab-panel');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panels.forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+                    if (tab.dataset.tab === 'bookings') loadHostBookings();
+                    if (tab.dataset.tab === 'profile') loadHostProfile();
+                });
+            });
+
+            // Load experiences tab
+            function loadExperiences() {
+                const container = document.getElementById('experiencesList');
+                if (myExperiences.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            <h2>Sin experiencias asignadas</h2>
+                            <p>Actualmente no tienes experiencias publicadas en la plataforma.</p>
+                            <p style="color: var(--color-gray-500); font-size: var(--text-sm); margin-top: var(--space-2);">Contacta al equipo de EcoXperiencia para publicar tu primera experiencia.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = myExperiences.map(exp => {
+                    const expBookings = allBookings.filter(b => b.experienceId === exp.id);
+                    const expRevenue = expBookings.filter(b => b.status === 'confirmada').reduce((s, b) => s + b.totalPrice, 0);
+                    const reviews = Reviews.getByExperience(exp.id);
+                    const avgRating = reviews.length > 0 ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : exp.rating;
+
+                    return `
+                        <div class="booking-item" style="margin-bottom: var(--space-4);">
+                            <div class="booking-item-image">
+                                <img src="${exp.image}" alt="${exp.title}" loading="lazy">
+                            </div>
+                            <div class="booking-item-info">
+                                <div class="booking-item-header">
+                                    <h3>${exp.title}</h3>
+                                    <span class="booking-status status-confirmed">Activa</span>
+                                </div>
+                                <p class="booking-item-location">${icons.mapPin} ${exp.location}</p>
+                                <div class="booking-item-details">
+                                    <span>★ ${avgRating} · ${reviews.length} reseñas</span>
+                                    <span>${icons.users} Máx. ${exp.maxPeople} personas</span>
+                                    <span>${formatPrice(exp.price)} / persona</span>
+                                    <span>${icons.creditCard} ${formatPrice(expRevenue)} ingresos</span>
+                                </div>
+                                <p style="font-size: var(--text-sm); color: var(--color-gray-500);">${expBookings.length} reserva${expBookings.length !== 1 ? 's' : ''} recibida${expBookings.length !== 1 ? 's' : ''}</p>
+                                <div class="booking-item-actions">
+                                    <button class="btn-view" onclick="window.location.href='experiencia.html?id=${exp.id}'">Ver experiencia</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Load host bookings tab
+            function loadHostBookings() {
+                const container = document.getElementById('hostBookingsList');
+                if (allBookings.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <h2>Sin reservas aún</h2>
+                            <p>Cuando los viajeros reserven tus experiencias, aparecerán aquí.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = allBookings.map(booking => {
+                    const statusMap = { confirmada: { label: 'Confirmada', cls: 'status-confirmed' }, cancelada: { label: 'Cancelada', cls: 'status-cancelled' }, completada: { label: 'Completada', cls: 'status-completed' } };
+                    const status = statusMap[booking.status] || statusMap.confirmada;
+                    const formattedDate = new Date(booking.date + 'T12:00:00').toLocaleDateString('es-CO', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+
+                    return `
+                        <div class="booking-item" style="margin-bottom: var(--space-4);">
+                            <div class="booking-item-image">
+                                <img src="${booking.experienceImage}" alt="${booking.experienceTitle}" loading="lazy">
+                            </div>
+                            <div class="booking-item-info">
+                                <div class="booking-item-header">
+                                    <h3>${booking.experienceTitle}</h3>
+                                    <span class="booking-status ${status.cls}">${status.label}</span>
+                                </div>
+                                <p style="font-size: var(--text-sm); color: var(--color-gray-700); margin-bottom: var(--space-2);"><strong>Viajero:</strong> ${booking.userName}</p>
+                                <div class="booking-item-details">
+                                    <span>${icons.calendar} ${formattedDate} · ${booking.time}</span>
+                                    <span>${icons.users} ${booking.guests} persona${booking.guests > 1 ? 's' : ''}</span>
+                                    <span>${icons.creditCard} ${formatPrice(booking.totalPrice)}</span>
+                                </div>
+                                <p class="booking-code">Código: <strong>${booking.confirmationCode}</strong></p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Load host profile tab
+            function loadHostProfile() {
+                const container = document.getElementById('hostProfileInfo');
+                if (!hostProfile) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: var(--space-8);">
+                            <p style="color: var(--color-gray-500);">Tu perfil de anfitrión está siendo procesado.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const certsHtml = hostProfile.certifications && hostProfile.certifications.length > 0
+                    ? hostProfile.certifications.map(c => `<span style="background: var(--color-cream); color: var(--color-moss); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: var(--text-sm); font-weight: 500;">${c}</span>`).join(' ')
+                    : '<span style="color: var(--color-gray-500); font-size: var(--text-sm);">Sin certificaciones registradas</span>';
+
+                container.innerHTML = `
+                    <h2 style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-moss); margin-bottom: var(--space-6);">Perfil de anfitrión</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-6);">
+                        <div>
+                            <h4 style="font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-500); text-transform: uppercase; margin-bottom: var(--space-2);">Documento</h4>
+                            <p>${hostProfile.documentType} · ${hostProfile.documentNumber}</p>
+                        </div>
+                        <div>
+                            <h4 style="font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-500); text-transform: uppercase; margin-bottom: var(--space-2);">Fecha de nacimiento</h4>
+                            <p>${new Date(hostProfile.birthDate + 'T12:00:00').toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                        </div>
+                        <div>
+                            <h4 style="font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-500); text-transform: uppercase; margin-bottom: var(--space-2);">Ciudad</h4>
+                            <p>${hostProfile.city}, ${hostProfile.department}</p>
+                        </div>
+                        <div>
+                            <h4 style="font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-500); text-transform: uppercase; margin-bottom: var(--space-2);">Dirección</h4>
+                            <p>${hostProfile.address}</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: var(--space-6);">
+                        <h4 style="font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-500); text-transform: uppercase; margin-bottom: var(--space-2);">Certificaciones</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">${certsHtml}</div>
+                    </div>
+                    ${hostProfile.hostBio ? `
+                    <div style="margin-top: var(--space-6);">
+                        <h4 style="font-size: var(--text-sm); font-weight: 600; color: var(--color-gray-500); text-transform: uppercase; margin-bottom: var(--space-2);">Biografía</h4>
+                        <p style="color: var(--color-gray-700); line-height: 1.8;">${hostProfile.hostBio}</p>
+                    </div>
+                    ` : ''}
+                    <div style="margin-top: var(--space-6); padding-top: var(--space-6); border-top: 1px solid var(--color-gray-100);">
+                        <p style="font-size: var(--text-sm); color: var(--color-gray-500);">Perfil registrado el ${new Date(hostProfile.createdAt).toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    </div>
+                `;
+            }
+
+            loadExperiences();
+
+            // Nueva experiencia
+            document.getElementById('btnNewExperience').addEventListener('click', () => showExpCreateModal());
+
+            function showExpCreateModal() {
+                const overlay = document.createElement('div');
+                overlay.className = 'exp-create-overlay';
+                overlay.innerHTML = `
+                    <div class="exp-create-modal">
+                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--space-6);">
+                            <h3 style="font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-moss);">Publicar nueva experiencia</h3>
+                            <button id="btnCloseExpModal" style="background:none;border:none;cursor:pointer;color:var(--color-gray-500);padding:var(--space-1);">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                        <form id="expCreateForm">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4);">
+                                <div class="form-group" style="grid-column:1/-1;">
+                                    <label for="expTitle">Título *</label>
+                                    <input type="text" id="expTitle" required placeholder="Ej: Trekking al Nevado del Ruiz">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expCategory">Categoría *</label>
+                                    <select id="expCategory" required>
+                                        <option value="">Seleccionar</option>
+                                        <option value="hiking">Senderismo</option>
+                                        <option value="wildlife">Avistamiento</option>
+                                        <option value="camping">Camping</option>
+                                        <option value="rivers">Ríos y cascadas</option>
+                                        <option value="agrotourism">Agroturismo</option>
+                                        <option value="highmountain">Alta montaña</option>
+                                        <option value="diving">Buceo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expLocation">Ubicación *</label>
+                                    <input type="text" id="expLocation" required placeholder="Ej: Manizales, Caldas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expPrice">Precio por persona (COP) *</label>
+                                    <input type="number" id="expPrice" required placeholder="150000" min="1000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expDuration">Duración</label>
+                                    <input type="text" id="expDuration" placeholder="Ej: 8 horas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expMaxPeople">Máx. participantes</label>
+                                    <input type="number" id="expMaxPeople" placeholder="10" min="1">
+                                </div>
+                                <div class="form-group" style="grid-column:1/-1;">
+                                    <label for="expDescription">Descripción *</label>
+                                    <textarea id="expDescription" rows="4" required placeholder="Describe la experiencia, qué vivirán los participantes..."></textarea>
+                                </div>
+                                <div class="form-group" style="grid-column:1/-1;">
+                                    <label for="expIncludes">¿Qué incluye? (separado por comas)</label>
+                                    <input type="text" id="expIncludes" placeholder="Guía local, Refrigerio, Seguro de viaje">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expMeetingPoint">Punto de encuentro</label>
+                                    <input type="text" id="expMeetingPoint" placeholder="Ej: Plaza central, 7:00 AM">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expCancellation">Política de cancelación</label>
+                                    <select id="expCancellation">
+                                        <option value="flexible">Flexible (hasta 24h antes)</option>
+                                        <option value="moderada">Moderada (hasta 5 días antes)</option>
+                                        <option value="estricta">Estricta (no reembolsable)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="grid-column:1/-1;">
+                                    <label for="expImage">URL de imagen (opcional)</label>
+                                    <input type="url" id="expImage" placeholder="https://images.unsplash.com/...">
+                                </div>
+                            </div>
+                            <div id="expCreateError" class="error-message"></div>
+                            <button type="submit" class="btn-submit" style="margin-top: var(--space-4);">Publicar experiencia</button>
+                        </form>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+                requestAnimationFrame(() => overlay.classList.add('active'));
+
+                overlay.querySelector('#btnCloseExpModal').addEventListener('click', () => {
+                    overlay.classList.remove('active');
+                    setTimeout(() => overlay.remove(), 300);
+                });
+
+                overlay.querySelector('#expCreateForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const errEl = overlay.querySelector('#expCreateError');
+                    errEl.textContent = '';
+                    errEl.classList.remove('show');
+
+                    const result = Host.createExperience({
+                        title: overlay.querySelector('#expTitle').value,
+                        categoryId: overlay.querySelector('#expCategory').value,
+                        location: overlay.querySelector('#expLocation').value,
+                        price: overlay.querySelector('#expPrice').value,
+                        duration: overlay.querySelector('#expDuration').value,
+                        maxPeople: overlay.querySelector('#expMaxPeople').value,
+                        description: overlay.querySelector('#expDescription').value,
+                        includes: overlay.querySelector('#expIncludes').value,
+                        meetingPoint: overlay.querySelector('#expMeetingPoint').value,
+                        cancellationPolicy: overlay.querySelector('#expCancellation').value,
+                        image: overlay.querySelector('#expImage').value
+                    });
+
+                    if (result.success) {
+                        overlay.classList.remove('active');
+                        setTimeout(() => overlay.remove(), 300);
+                        EcoXperiencia.Toast.show('¡Experiencia publicada exitosamente!');
+                        // Refresh stats and list
+                        const updMyExp = Host.getMyExperiences();
+                        document.getElementById('statExperiences').textContent = updMyExp.length;
+                        loadExperiences();
+                    } else {
+                        errEl.textContent = result.message;
+                        errEl.classList.add('show');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,386 +1,585 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalle de Experiencia - EcoXperiencia</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de experiencia - EcoXperiencia</title>
+    <meta name="description" content="Descubre los detalles de esta experiencia ecoturística única en Colombia.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <!-- Navbar will be injected here -->
-  <nav id="navbar-container"></nav>
+    <div id="navbar-container"></div>
 
-  <!-- Experience Header -->
-  <section class="detail-header">
-    <div class="container">
-      <h1 class="detail-title" id="exp-title">Cargando...</h1>
-      <div class="detail-meta">
-        <span id="exp-location">📍 Colombia</span>
-        <span id="exp-category">🏷️ Categoría</span>
-        <span id="exp-rating">⭐ 4.8 (127 reseñas)</span>
-      </div>
+    <div class="page-content">
+        <section class="experience-detail" id="experienceDetail">
+            <div class="container">
+                <div class="experience-header">
+                    <nav class="experience-breadcrumbs">
+                        <a href="explorar.html">Experiencias</a>
+                        <span>/</span>
+                        <span id="breadcrumb-title">Cargando...</span>
+                    </nav>
+                    <h1 class="experience-title" id="experienceTitle">Cargando...</h1>
+                    <div class="experience-meta">
+                        <span id="experienceRating">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <span id="ratingValue">-</span> · <span id="reviewsValue">-</span> reseñas
+                        </span>
+                        <span id="experienceLocation">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span id="locationValue">-</span>
+                        </span>
+                        <span id="experienceCategory">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                            <span id="categoryValue">-</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="experience-gallery" id="experienceGallery">
+                    <div class="gallery-main">
+                        <img id="mainImage" src="" alt="">
+                    </div>
+                    <div class="gallery-thumbs" id="galleryThumbs"></div>
+                </div>
+
+                <div class="experience-content">
+                    <div class="experience-left">
+                        <div class="experience-description">
+                            <h3>Acerca de esta experiencia</h3>
+                            <p id="experienceDescription">Cargando...</p>
+
+                            <div class="experience-info-grid">
+                                <div class="experience-info-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    <div><strong>Duración</strong><span id="expDuration">-</span></div>
+                                </div>
+                                <div class="experience-info-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                                    <div><strong>Máximo</strong><span id="expMaxPeople">-</span></div>
+                                </div>
+                                <div class="experience-info-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <div><strong>Punto de encuentro</strong><span id="expMeetingPoint">-</span></div>
+                                </div>
+                                <div class="experience-info-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                    <div><strong>Cancelación</strong><span id="expCancellation">-</span></div>
+                                </div>
+                            </div>
+
+                            <h3 style="margin-top: var(--space-8);">Lo que incluye</h3>
+                            <div class="experience-features" id="experienceFeatures"></div>
+
+                            <h3 style="margin-top: var(--space-8);">Tu anfitrión</h3>
+                            <div class="card" style="background: white; padding: var(--space-6); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                                <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4);">
+                                    <div id="hostAvatar" style="width: 64px; height: 64px; border-radius: 50%; background-color: var(--color-moss); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: var(--text-xl); flex-shrink: 0;"></div>
+                                    <div>
+                                        <h4 id="hostName" style="font-weight: 600; color: var(--color-moss);"></h4>
+                                        <p id="hostSince" style="font-size: var(--text-sm); color: var(--color-gray-500);"></p>
+                                    </div>
+                                </div>
+                                <p id="hostBio" style="color: var(--color-gray-700);"></p>
+                            </div>
+
+                            <!-- Reviews Section -->
+                            <div class="reviews-section" style="margin-top: var(--space-10);">
+                                <div class="reviews-header">
+                                    <h3>Reseñas</h3>
+                                    <span id="reviewsAverage"></span>
+                                </div>
+
+                                <div id="reviewsList"></div>
+
+                                <!-- Review Form -->
+                                <div id="reviewFormContainer" style="margin-top: var(--space-8);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="experience-right">
+                        <div class="booking-card">
+                            <div class="booking-price">
+                                <span class="price" id="bookingPrice">-</span>
+                                <span class="per-person">/ persona</span>
+                            </div>
+
+                            <div class="booking-dates">
+                                <div class="booking-date">
+                                    <label>Fecha</label>
+                                    <input type="date" id="bookingDate" min="">
+                                </div>
+                                <div class="booking-date">
+                                    <label>Horario</label>
+                                    <select id="bookingTime">
+                                        <option value="08:00">08:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="14:00">02:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="booking-guests">
+                                <label>Viajeros</label>
+                                <select id="bookingGuests">
+                                    <option value="1">1 persona</option>
+                                    <option value="2">2 personas</option>
+                                    <option value="3">3 personas</option>
+                                    <option value="4">4 personas</option>
+                                    <option value="5">5+ personas</option>
+                                </select>
+                            </div>
+
+                            <div id="bookingSummary" style="margin-bottom: var(--space-4); padding: var(--space-4); background-color: var(--color-cream); border-radius: var(--radius-md);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
+                                    <span id="summaryPricePerPerson"></span>
+                                    <span id="summaryGuests"></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-weight: 600; padding-top: var(--space-2); border-top: 1px solid var(--color-gray-300);">
+                                    <span>Total</span>
+                                    <span id="summaryTotal"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: var(--space-4);">
+                                <label for="bookingNotes" style="font-size: var(--text-xs); font-weight: 600; color: var(--color-moss); text-transform: uppercase;">Notas (opcional)</label>
+                                <textarea id="bookingNotes" rows="2" placeholder="Alguna preferencia o restricción..." style="width:100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-gray-300); border-radius: var(--radius-md); font-size: var(--text-sm); resize: none;"></textarea>
+                            </div>
+
+                            <button class="btn-book" id="btnBook">Reservar ahora</button>
+                            <button class="btn-save" id="btnSave">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                                Guardar en favoritos
+                            </button>
+
+                            <p class="booking-note">Cancelación gratuita hasta 24 horas antes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-  </section>
 
-  <!-- Experience Content -->
-  <section class="section">
-    <div class="container">
-      <!-- Gallery -->
-      <div class="gallery" id="gallery-container">
-        <!-- Gallery will be loaded here -->
-      </div>
+    <div id="footer-container"></div>
 
-      <!-- Main Content -->
-      <div class="detail-content">
-        <div class="detail-main">
-          
-          <!-- Description Section -->
-          <div class="detail-section">
-            <h3>Acerca de esta experiencia</h3>
-            <p id="exp-description">Cargando descripción...</p>
-          </div>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const { Auth, Bookings, Reviews, Favorites, Toast, getAllExperiences, formatPrice, getUrlParam } = EcoXperiencia;
 
-          <!-- Includes Section -->
-          <div class="detail-section">
-            <h3>¿Qué incluye?</h3>
-            <ul class="includes-list" id="exp-includes">
-              <li>Cargando...</li>
-            </ul>
-          </div>
+            const rawId = getUrlParam('id');
+            const experienceId = rawId ? (parseInt(rawId) || rawId) : null;
+            if (!experienceId) { window.location.href = '404.html'; return; }
 
-          <!-- Host Section -->
-          <div class="detail-section">
-            <h3>Conoce al anfitrión</h3>
-            <div class="host-card" id="host-card">
-              <div class="host-avatar" id="host-avatar">--</div>
-              <h4 class="host-name" id="host-name">Cargando...</h4>
-              <p class="host-since" id="host-since">Desde 2020</p>
-              <p class="host-bio" id="host-bio">Guía con experiencia en la región</p>
-            </div>
-          </div>
+            const experience = getAllExperiences().find(e => String(e.id) === String(experienceId));
+            if (!experience) { window.location.href = '404.html'; return; }
 
-          <!-- Reviews Section -->
-          <div class="reviews-section">
-            <div class="reviews-header">
-              <div>
-                <h3>Reseñas de viajeros</h3>
-              </div>
-              <div class="review-rating">
-                <div class="review-rating-number" id="avg-rating">4.8</div>
-                <div class="review-rating-text">
-                  <div id="rating-stars">★★★★★</div>
-                  <small id="review-count">(127 reseñas)</small>
+            // Populate basic data
+            document.title = experience.title + ' - EcoXperiencia';
+            document.getElementById('breadcrumb-title').textContent = experience.title;
+            document.getElementById('experienceTitle').textContent = experience.title;
+            document.getElementById('ratingValue').textContent = experience.rating;
+            document.getElementById('reviewsValue').textContent = experience.reviews;
+            document.getElementById('locationValue').textContent = experience.location;
+            document.getElementById('categoryValue').textContent = experience.category;
+            document.getElementById('experienceDescription').textContent = experience.description;
+            document.getElementById('bookingPrice').textContent = formatPrice(experience.price);
+            document.getElementById('expDuration').textContent = experience.duration;
+            document.getElementById('expMaxPeople').textContent = experience.maxPeople + ' personas';
+            document.getElementById('expMeetingPoint').textContent = experience.meetingPoint || 'A confirmar';
+
+            const cancellationLabels = { flexible: 'Flexible (hasta 24h antes)', moderada: 'Moderada (hasta 5 días antes)', estricta: 'Estricta (no reembolsable)' };
+            document.getElementById('expCancellation').textContent = cancellationLabels[experience.cancellationPolicy] || experience.cancellationPolicy;
+
+            // Image gallery
+            document.getElementById('mainImage').src = experience.image;
+            document.getElementById('mainImage').alt = experience.title;
+
+            const thumbsContainer = document.getElementById('galleryThumbs');
+            thumbsContainer.innerHTML = [1, 2, 3, 4].map(() =>
+                `<img src="${experience.image}" alt="${experience.title}">`
+            ).join('');
+
+            thumbsContainer.querySelectorAll('img').forEach((thumb, i) => {
+                if (i === 0) thumb.classList.add('active');
+                thumb.addEventListener('click', () => {
+                    document.getElementById('mainImage').src = thumb.src;
+                    thumbsContainer.querySelectorAll('img').forEach(t => t.classList.remove('active'));
+                    thumb.classList.add('active');
+                });
+            });
+
+            // Features
+            document.getElementById('experienceFeatures').innerHTML = experience.includes.map(item => `
+                <div class="experience-feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>${item}</span>
                 </div>
-              </div>
-            </div>
-            <div id="reviews-container">
-              <!-- Reviews will be loaded here -->
-            </div>
-          </div>
-        </div>
+            `).join('');
 
-        <!-- Booking Sidebar -->
-        <aside>
-          <div class="booking-card">
-            <div class="booking-header">
-              <div class="booking-price" id="booking-price">$180.000</div>
-              <p class="booking-price-label">por persona</p>
-            </div>
+            // Host info
+            document.getElementById('hostAvatar').textContent = experience.host.avatar;
+            document.getElementById('hostName').textContent = experience.host.name;
+            document.getElementById('hostSince').textContent = 'Anfitrión desde ' + experience.host.since;
+            document.getElementById('hostBio').textContent = experience.host.bio;
 
-            <form class="booking-form" id="booking-form" onsubmit="submitBooking(event)">
-              <div>
-                <label class="search-box-label">Fecha de inicio</label>
-                <input type="date" id="booking-date" required>
-              </div>
+            // Booking form
+            const bookingDate = document.getElementById('bookingDate');
+            const bookingGuests = document.getElementById('bookingGuests');
+            const today = new Date().toISOString().split('T')[0];
+            bookingDate.setAttribute('min', today);
+            bookingDate.value = today;
 
-              <div>
-                <label class="search-box-label">Hora de inicio</label>
-                <input type="time" id="booking-time" value="08:00" required>
-              </div>
+            function updateSummary() {
+                const guests = parseInt(bookingGuests.value);
+                const total = experience.price * guests;
+                document.getElementById('summaryPricePerPerson').textContent = formatPrice(experience.price);
+                document.getElementById('summaryGuests').textContent = 'x ' + guests + ' persona' + (guests > 1 ? 's' : '');
+                document.getElementById('summaryTotal').textContent = formatPrice(total);
+            }
 
-              <div>
-                <label class="search-box-label">Número de personas</label>
-                <input 
-                  type="number" 
-                  id="booking-persons" 
-                  min="1" 
-                  value="1"
-                  onchange="updateTotal()"
-                  oninput="updateTotal()"
-                  required
-                >
-              </div>
+            updateSummary();
+            bookingGuests.addEventListener('change', updateSummary);
 
-              <div class="booking-summary">
-                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
-                  <span>Duración:</span>
-                  <strong id="duration-display">12 horas</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                  <span>Personas:</span>
-                  <strong id="persons-display">1</strong>
-                </div>
-              </div>
+            // Favorite button
+            const btnSave = document.getElementById('btnSave');
+            function updateFavBtn() {
+                const isFav = Favorites.isFavorite(experience.id);
+                btnSave.classList.toggle('active', isFav);
+                btnSave.innerHTML = isFav
+                    ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> Guardado en favoritos`
+                    : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> Guardar en favoritos`;
+            }
+            updateFavBtn();
 
-              <div class="booking-total">
-                <span>Total:</span>
-                <span id="total-price">$180.000</span>
-              </div>
+            btnSave.addEventListener('click', () => {
+                if (!Auth.isLoggedIn()) {
+                    Toast.show('Inicia sesión para guardar favoritos', 'error');
+                    setTimeout(() => window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href), 1500);
+                    return;
+                }
+                Favorites.toggle(experience.id);
+                updateFavBtn();
+                Toast.show(Favorites.isFavorite(experience.id) ? 'Agregado a favoritos' : 'Eliminado de favoritos');
+            });
 
-              <button type="submit" class="btn-book">Reservar ahora</button>
-            </form>
+            // Book button — opens payment simulation
+            document.getElementById('btnBook').addEventListener('click', () => {
+                if (!Auth.isLoggedIn()) {
+                    Toast.show('Inicia sesión para reservar', 'error');
+                    setTimeout(() => window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href), 1500);
+                    return;
+                }
+                const date = bookingDate.value;
+                if (!date) { Toast.show('Selecciona una fecha', 'error'); return; }
 
-            <button class="btn btn-outline w-full mt-4" id="favorite-btn" onclick="toggleFavoriteExp()">
-              ♡ Guardar
-            </button>
-          </div>
-        </aside>
-      </div>
-    </div>
-  </section>
+                const guests = parseInt(document.getElementById('bookingGuests').value);
+                const total = experience.price * guests;
+                showPaymentModal(total, guests, date, () => {
+                    const result = Bookings.create({
+                        experienceId: experience.id,
+                        date: date,
+                        time: document.getElementById('bookingTime').value,
+                        guests: guests,
+                        notes: document.getElementById('bookingNotes').value
+                    });
+                    if (result.success) {
+                        showBookingSuccess(result.booking);
+                    } else {
+                        Toast.show(result.message || 'Error al crear la reserva', 'error');
+                    }
+                });
+            });
 
-  <!-- Footer will be injected here -->
-  <footer id="footer-container"></footer>
+            function showPaymentModal(total, guests, date, onSuccess) {
+                const overlay = document.createElement('div');
+                overlay.className = 'payment-overlay';
+                overlay.innerHTML = `
+                    <div class="payment-modal">
+                        <div class="payment-modal-header">
+                            <div>
+                                <h3>Pago seguro</h3>
+                                <span class="payment-sim-badge">SIMULACIÓN</span>
+                            </div>
+                            <button class="payment-close" id="btnPayClose" type="button">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                        <div class="payment-summary-box">
+                            <div class="payment-summary-row"><span>${experience.title}</span><span>${guests} persona${guests > 1 ? 's' : ''}</span></div>
+                            <div class="payment-summary-row"><span>Fecha</span><span>${new Date(date + 'T12:00:00').toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' })}</span></div>
+                            <div class="payment-summary-total"><span>Total a pagar</span><strong>${formatPrice(total)}</strong></div>
+                        </div>
+                        <form id="paymentForm">
+                            <div class="payment-methods-icons">
+                                <span class="payment-card-icon">VISA</span>
+                                <span class="payment-card-icon">MC</span>
+                                <span class="payment-card-icon">PSE</span>
+                                <span class="payment-card-icon">NEQUI</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="payCardNumber">Número de tarjeta</label>
+                                <input type="text" id="payCardNumber" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
+                            </div>
+                            <div class="form-group">
+                                <label for="payCardHolder">Titular</label>
+                                <input type="text" id="payCardHolder" placeholder="Juan Pérez" autocomplete="cc-name">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                                <div class="form-group">
+                                    <label for="payExpiry">Vencimiento</label>
+                                    <input type="text" id="payExpiry" placeholder="MM/AA" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="payCvv">CVV</label>
+                                    <input type="text" id="payCvv" placeholder="•••" maxlength="3">
+                                </div>
+                            </div>
+                            <div id="paymentError" class="error-message"></div>
+                            <button type="submit" class="btn-pay">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                Pagar ${formatPrice(total)}
+                            </button>
+                            <p class="payment-secure-note">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                Entorno de simulación — ningún dato es real
+                            </p>
+                        </form>
+                        <div id="paymentProcessing" style="display:none;" class="payment-processing">
+                            <div class="payment-spinner"></div>
+                            <p>Procesando pago...</p>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+                requestAnimationFrame(() => overlay.classList.add('active'));
 
-  <script src="js/app.js"></script>
-  <script>
-    let currentExperience = null;
+                overlay.querySelector('#btnPayClose').addEventListener('click', () => {
+                    overlay.classList.remove('active');
+                    setTimeout(() => overlay.remove(), 300);
+                });
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const params = getURLParams();
-      const experienceId = params.id;
+                overlay.querySelector('#payCardNumber').addEventListener('input', function () {
+                    const v = this.value.replace(/\D/g, '').slice(0, 16);
+                    this.value = v.replace(/(.{4})/g, '$1 ').trim();
+                });
+                overlay.querySelector('#payExpiry').addEventListener('input', function () {
+                    const v = this.value.replace(/\D/g, '').slice(0, 4);
+                    this.value = v.length > 2 ? v.slice(0, 2) + '/' + v.slice(2) : v;
+                });
+                overlay.querySelector('#payCvv').addEventListener('input', function () {
+                    this.value = this.value.replace(/\D/g, '').slice(0, 3);
+                });
 
-      if (!experienceId) {
-        window.location.href = '404.html';
-        return;
-      }
+                overlay.querySelector('#paymentForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const errEl = overlay.querySelector('#paymentError');
+                    errEl.textContent = '';
+                    errEl.classList.remove('show');
 
-      try {
-        currentExperience = await Experiences.getOne(experienceId);
+                    const num = overlay.querySelector('#payCardNumber').value.replace(/\s/g, '');
+                    const holder = overlay.querySelector('#payCardHolder').value.trim();
+                    const exp = overlay.querySelector('#payExpiry').value;
+                    const cvv = overlay.querySelector('#payCvv').value;
 
-        if (!currentExperience) {
-          window.location.href = '404.html';
-          return;
-        }
+                    if (num.length < 16) { errEl.textContent = 'Número de tarjeta inválido'; errEl.classList.add('show'); return; }
+                    if (!holder) { errEl.textContent = 'Ingresa el nombre del titular'; errEl.classList.add('show'); return; }
+                    if (exp.length < 5) { errEl.textContent = 'Fecha de vencimiento inválida'; errEl.classList.add('show'); return; }
+                    if (cvv.length < 3) { errEl.textContent = 'CVV inválido'; errEl.classList.add('show'); return; }
 
-        renderExperience();
-        setMinDate();
-      } catch (error) {
-        console.error('Error loading experience:', error);
-        window.location.href = '404.html';
-      }
-    });
+                    overlay.querySelector('#paymentForm').style.display = 'none';
+                    overlay.querySelector('#paymentProcessing').style.display = 'flex';
 
-    function renderExperience() {
-      const exp = currentExperience;
+                    setTimeout(() => {
+                        overlay.classList.remove('active');
+                        setTimeout(() => { overlay.remove(); onSuccess(); }, 300);
+                    }, 2000);
+                });
+            }
 
-      // Basic info
-      document.title = `${exp.titulo || exp.title} - EcoXperiencia`;
-      document.getElementById('exp-title').textContent = exp.titulo || exp.title;
-      document.getElementById('exp-location').textContent = `📍 ${exp.ubicacion_texto || exp.location || 'Colombia'}`;
-      document.getElementById('exp-category').textContent = `🏷️ ${exp.categoria?.nombre || exp.category || 'Experiencia'}`;
-      document.getElementById('exp-rating').textContent = `⭐ ${exp.rating || 4.8} (${exp.reviews_count || 127} reseñas)`;
-      document.getElementById('exp-description').textContent = exp.descripcion || exp.description || 'Descripción no disponible';
+            function showBookingSuccess(booking) {
+                const successOverlay = document.createElement('div');
+                successOverlay.className = 'modal-overlay';
+                successOverlay.innerHTML = `
+                    <div class="modal">
+                        <div class="modal-icon" style="color: #22c55e;">
+                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/>
+                            </svg>
+                        </div>
+                        <h3>¡Pago exitoso!</h3>
+                        <p style="color: var(--color-gray-600); margin-bottom: var(--space-4);">Tu reserva está confirmada</p>
+                        <div style="background: var(--color-cream); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-6); text-align: left; font-size: var(--text-sm);">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
+                                <span style="color: var(--color-gray-500);">Código</span>
+                                <strong style="color: var(--color-moss); font-family: monospace; font-size: var(--text-base);">${booking.confirmationCode}</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
+                                <span style="color: var(--color-gray-500);">Fecha</span>
+                                <span>${new Date(booking.date + 'T12:00:00').toLocaleDateString('es-CO', { weekday: 'short', day: 'numeric', month: 'short' })}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);">
+                                <span style="color: var(--color-gray-500);">Personas</span>
+                                <span>${booking.guests} persona${booking.guests > 1 ? 's' : ''}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--color-gray-500);">Total pagado</span>
+                                <strong>$${booking.totalPrice.toLocaleString('es-CO')} COP</strong>
+                            </div>
+                        </div>
+                        <div class="modal-buttons">
+                            <button class="btn-secondary" onclick="window.location.href='perfil.html#bookings'">Mis reservas</button>
+                            <button class="btn-submit" onclick="window.location.href='explorar.html'">Explorar más</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(successOverlay);
+                requestAnimationFrame(() => successOverlay.classList.add('active'));
+                successOverlay.addEventListener('click', e => {
+                    if (e.target === successOverlay) {
+                        successOverlay.classList.remove('active');
+                        setTimeout(() => successOverlay.remove(), 300);
+                    }
+                });
+                loadReviews();
+            }
 
-      // Price
-      const price = exp.precio_base || exp.price || 180000;
-      document.getElementById('booking-price').textContent = `$${price.toLocaleString('es-CO')}`;
-      document.getElementById('total-price').textContent = `$${price.toLocaleString('es-CO')}`;
+            // --- REVIEWS ---
+            function loadReviews() {
+                const reviews = Reviews.getByExperience(experienceId);
+                const container = document.getElementById('reviewsList');
+                const avgEl = document.getElementById('reviewsAverage');
 
-      // Duration
-      const duration = exp.duracion_horas || 12;
-      document.getElementById('duration-display').textContent = `${duration} horas`;
+                if (reviews.length === 0) {
+                    container.innerHTML = `<p style="color: var(--color-gray-500); font-style: italic;">Sé el primero en reseñar esta experiencia.</p>`;
+                    avgEl.innerHTML = '';
+                } else {
+                    const avg = (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1);
+                    avgEl.innerHTML = `★ ${avg} · ${reviews.length} reseña${reviews.length !== 1 ? 's' : ''}`;
 
-      // Gallery
-      const gallery = document.getElementById('gallery-container');
-      gallery.innerHTML = '';
+                    container.innerHTML = reviews.map(review => `
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-author">
+                                    <div class="review-avatar" style="background-color: var(--color-moss);">${review.userAvatar}</div>
+                                    <div class="review-meta">
+                                        <h4>${review.userName}</h4>
+                                        <span>${Reviews.formatDate(review.createdAt)}</span>
+                                    </div>
+                                </div>
+                                <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                            </div>
+                            <p class="review-text">${review.comment}</p>
+                        </div>
+                    `).join('');
+                }
 
-      const images = [
-        exp.imagen_url || exp.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=600&fit=crop',
-        'https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=300&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=300&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=300&h=300&fit=crop',
-      ];
+                // Review form
+                renderReviewForm();
+            }
 
-      const mainImg = document.createElement('div');
-      mainImg.className = 'gallery-item gallery-main';
-      mainImg.innerHTML = `<img src="${images[0]}" alt="${exp.titulo}" onerror="this.src='https://via.placeholder.com/600x600'">`;
-      gallery.appendChild(mainImg);
+            function renderReviewForm() {
+                const formContainer = document.getElementById('reviewFormContainer');
+                if (!Auth.isLoggedIn()) {
+                    formContainer.innerHTML = `
+                        <div style="background: var(--color-cream); border-radius: var(--radius-lg); padding: var(--space-6); text-align: center;">
+                            <p style="color: var(--color-gray-700); margin-bottom: var(--space-3);">¿Disfrutaste esta experiencia?</p>
+                            <a href="login.html?redirect=${encodeURIComponent(window.location.href)}" class="btn-submit" style="display: inline-block; width: auto; padding: var(--space-3) var(--space-6);">Inicia sesión para reseñar</a>
+                        </div>
+                    `;
+                    return;
+                }
 
-      images.slice(1).forEach(img => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.innerHTML = `<img src="${img}" alt="Galería" onerror="this.src='https://via.placeholder.com/300x300'">`;
-        gallery.appendChild(item);
-      });
+                if (Reviews.hasReviewed(experienceId)) {
+                    formContainer.innerHTML = `
+                        <div style="background: var(--color-cream); border-radius: var(--radius-lg); padding: var(--space-4); display: flex; align-items: center; gap: var(--space-3);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <p style="color: var(--color-gray-700);">Ya has reseñado esta experiencia. ¡Gracias por tu opinión!</p>
+                        </div>
+                    `;
+                    return;
+                }
 
-      // Includes
-      const includesList = document.getElementById('exp-includes');
-      includesList.innerHTML = '';
+                formContainer.innerHTML = `
+                    <div style="background: white; border-radius: var(--radius-lg); padding: var(--space-6); box-shadow: var(--shadow-sm);">
+                        <h4 style="font-family: var(--font-display); color: var(--color-moss); margin-bottom: var(--space-4);">Escribe tu reseña</h4>
+                        <form id="reviewForm">
+                            <div class="form-group">
+                                <label>Calificación</label>
+                                <div class="star-rating" id="starRating">
+                                    ${[1,2,3,4,5].map(n => `<button type="button" class="star-btn" data-value="${n}" aria-label="${n} estrellas">★</button>`).join('')}
+                                </div>
+                                <input type="hidden" id="selectedRating" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="reviewComment">Tu opinión</label>
+                                <textarea id="reviewComment" rows="4" placeholder="Cuéntanos sobre tu experiencia (mínimo 10 caracteres)..." required></textarea>
+                            </div>
+                            <div id="review-error" class="error-message"></div>
+                            <button type="submit" class="btn-submit" style="width: auto; padding: var(--space-3) var(--space-6);">Publicar reseña</button>
+                        </form>
+                    </div>
+                `;
 
-      const includes = exp.incluye || [
-        'Guía local experto',
-        'Transporte incluido',
-        'Almuerzo típico',
-        'Seguro de viaje',
-        'Fotos profesionales',
-      ];
+                // Star rating interaction
+                const starBtns = formContainer.querySelectorAll('.star-btn');
+                const selectedRatingInput = formContainer.querySelector('#selectedRating');
+                let currentRating = 0;
 
-      includes.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        includesList.appendChild(li);
-      });
+                starBtns.forEach(btn => {
+                    btn.addEventListener('mouseover', () => {
+                        const val = parseInt(btn.dataset.value);
+                        starBtns.forEach((b, i) => b.classList.toggle('hovered', i < val));
+                    });
+                    btn.addEventListener('mouseout', () => {
+                        starBtns.forEach((b, i) => b.classList.toggle('selected', i < currentRating));
+                        starBtns.forEach(b => b.classList.remove('hovered'));
+                    });
+                    btn.addEventListener('click', () => {
+                        currentRating = parseInt(btn.dataset.value);
+                        selectedRatingInput.value = currentRating;
+                        starBtns.forEach((b, i) => {
+                            b.classList.toggle('selected', i < currentRating);
+                            b.classList.remove('hovered');
+                        });
+                    });
+                });
 
-      // Host info
-      const hostName = exp.anfitrion?.usuario?.nombre_completo || 'Carlos Martínez';
-      const hostInitials = hostName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                // Review form submit
+                formContainer.querySelector('#reviewForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const errorEl = formContainer.querySelector('#review-error');
+                    errorEl.textContent = '';
+                    errorEl.classList.remove('show');
 
-      document.getElementById('host-avatar').textContent = hostInitials;
-      document.getElementById('host-name').textContent = hostName;
-      document.getElementById('host-since').textContent = `Anfitrión desde 2019`;
-      document.getElementById('host-bio').textContent = 'Guía local apasionado por compartir las bellezas naturales de Colombia de manera responsable y sostenible.';
+                    const rating = parseInt(selectedRatingInput.value);
+                    const comment = formContainer.querySelector('#reviewComment').value;
 
-      // Reviews
-      const reviewsContainer = document.getElementById('reviews-container');
-      reviewsContainer.innerHTML = '';
+                    if (!rating) {
+                        errorEl.textContent = 'Selecciona una calificación';
+                        errorEl.classList.add('show');
+                        return;
+                    }
 
-      const reviews = exp.reviews || [
-        {
-          name: 'María González',
-          rating: 5,
-          date: 'Hace 2 semanas',
-          text: 'Una experiencia increíble. El guía fue muy atento y los detalles importaban. Regresaría sin dudarlo.',
-        },
-        {
-          name: 'Juan Martín',
-          rating: 5,
-          date: 'Hace 1 mes',
-          text: 'Perfectamente organizado. La naturaleza es hermosa y el guía conocía cada rincón. Muy recomendable.',
-        },
-        {
-          name: 'Sofia Díaz',
-          rating: 4,
-          date: 'Hace 1 mes',
-          text: 'Muy buena experiencia. Solo sugerencia: llevar más agua en el equipaje.',
-        },
-      ];
+                    const result = Reviews.create({ experienceId, rating, comment });
+                    if (result.success) {
+                        Toast.show('¡Reseña publicada con éxito!');
+                        loadReviews();
+                    } else {
+                        errorEl.textContent = result.message;
+                        errorEl.classList.add('show');
+                    }
+                });
+            }
 
-      reviews.forEach(review => {
-        const reviewEl = document.createElement('div');
-        reviewEl.className = 'review-item';
-
-        const initials = review.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-
-        reviewEl.innerHTML = `
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar">${initials}</div>
-              <div>
-                <div class="reviewer-name">${review.name}</div>
-                <div class="review-date">${review.date}</div>
-              </div>
-            </div>
-            <div class="review-stars">${'★'.repeat(review.rating || 5)}</div>
-          </div>
-          <p class="review-text">${review.text}</p>
-        `;
-        reviewEl.style.animation = 'fadeUp 0.6s ease-out';
-        reviewsContainer.appendChild(reviewEl);
-      });
-
-      // Update favorite button
-      updateFavoriteButton();
-    }
-
-    function setMinDate() {
-      const today = formatDateForInput(new Date());
-      document.getElementById('booking-date').value = today;
-      document.getElementById('booking-date').min = today;
-    }
-
-    function updateTotal() {
-      const price = parseFloat(document.getElementById('booking-price').textContent.replace(/[^\d]/g, ''));
-      const persons = parseInt(document.getElementById('booking-persons').value) || 1;
-
-      const total = price * persons;
-
-      document.getElementById('persons-display').textContent = persons;
-      document.getElementById('total-price').textContent = `$${total.toLocaleString('es-CO')}`;
-    }
-
-    function updateFavoriteButton() {
-      const btn = document.getElementById('favorite-btn');
-      const isFav = Favorites.isFavorite(currentExperience.id);
-      btn.textContent = isFav ? '♥ Guardado' : '♡ Guardar';
-      btn.style.color = isFav ? 'var(--color-error)' : 'inherit';
-    }
-
-    async function toggleFavoriteExp() {
-      await Favorites.toggle(currentExperience.id);
-      updateFavoriteButton();
-    }
-
-    async function submitBooking(e) {
-      e.preventDefault();
-
-      if (!Auth.isLoggedIn()) {
-        window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
-        return;
-      }
-
-      const date = document.getElementById('booking-date').value;
-      const time = document.getElementById('booking-time').value;
-      const persons = parseInt(document.getElementById('booking-persons').value);
-      const price = parseFloat(document.getElementById('booking-price').textContent.replace(/[^\d]/g, ''));
-      const total = price * persons;
-
-      const bookingData = {
-        experience_id: currentExperience.id,
-        fecha_inicio: `${date}T${time}:00`,
-        cantidad_personas: persons,
-        monto_total: total,
-        estado: 'confirmada',
-      };
-
-      Modal.show(
-        'Confirmar Reserva',
-        `
-          <p>Por favor, confirma los detalles de tu reserva:</p>
-          <ul style="margin: var(--space-6) 0; text-align: left;">
-            <li><strong>Experiencia:</strong> ${currentExperience.titulo}</li>
-            <li><strong>Fecha:</strong> ${new Date(date).toLocaleDateString('es-CO')}</li>
-            <li><strong>Hora:</strong> ${time}</li>
-            <li><strong>Personas:</strong> ${persons}</li>
-            <li><strong>Total:</strong> $${total.toLocaleString('es-CO')}</li>
-          </ul>
-          <p>Se te redireccionará a pagos para completar la transacción.</p>
-        `,
-        [
-          {
-            text: 'Cancelar',
-            class: 'btn btn-secondary',
-            onClick: () => Modal.close(),
-          },
-          {
-            text: 'Confirmar y Pagar',
-            class: 'btn btn-primary',
-            onClick: async () => {
-              const booking = await Bookings.create(bookingData);
-              if (booking) {
-                Toast.show('Reserva creada. Redirigiendo a pagos...', 'success');
-                setTimeout(() => {
-                  window.location.href = 'perfil.html';
-                }, 2000);
-              }
-            },
-          },
-        ]
-      );
-    }
-  </script>
+            loadReviews();
+        });
+    </script>
 </body>
 </html>
